@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <script>
+        function guessTheNumber() {
+            var attemptsLeft = 10
+            const theNumber = Math.floor(Math.random() * (100 - 0 + 1) + 0)
+            let input = prompt("Guess a number between 0 and 100 (inclusively): ")
+            while (true) {
+                // validation process
+                if (input == null) {
+                    console.log("Game has been stopped by user")
+                    return
+                }
+                input = input.trim()
+                if (input == "" || isNaN(input)) {
+                    while (true) {
+                        alert("Please enter a valid inupt (a number)")
+                        input = prompt("Guess a number: ")
+                        if (input != "" && !isNaN(input)) {
+                            break
+                        }
+                    }
+                }
+
+                // Game starts
+                if (input == theNumber) {
+                    alert("You won!")
+                    break
+                } else {
+                    let difference = Math.abs(input - theNumber)
+                    attemptsLeft--
+                    if (input < theNumber) {
+                        if (difference <=5) {
+                            alert("Ooo that is close but you might wanna try a little higher number!\n" + 
+                            "Remember that you have " + attemptsLeft + " attempts left total")
+                            input = prompt("Guess another number: ")
+                        } else {
+                            alert("Too low. Try higher number!\n" + 
+                            "Remember that you have " + attemptsLeft + " attempts left total")
+                            input = prompt("Guess another number: ")
+                        }
+                    } else {
+                        if (difference <=5) {
+                            alert("Ooo that is close but you might wanna try a little lower number!\n" + 
+                            "Remember that you have " + attemptsLeft + " attempts left total")
+                            input = prompt("Guess another number: ")
+                        } else {
+                            alert("Too high. Try a lower number!\n" + 
+                            "Remember that you have " + attemptsLeft + " attempts left total")
+                            input = prompt("Guess another number: ")
+                        }
+                    }
+                }
+            }
+        }
+
+        guessTheNumber()
+    </script>
+</html>

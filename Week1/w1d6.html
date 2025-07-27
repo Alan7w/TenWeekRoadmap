@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="w1d6_style.css">
+        <script src="w1k6.js"></script>
+    </head>
+    <body>
+        <div>
+            <p id="0"> 1. What is the capital of France? </p>
+
+            <input type="radio" id="option1" name="option" onclick="toggleNextButton(false)">Italy<br>
+            <input type="radio" id="option2" name="option" onclick="toggleNextButton(false)">Paris<br>
+            <input type="radio" id="option3" name="option" onclick="toggleNextButton(false)">Vancouver<br><br>
+
+            <button id="nextButton" disabled onclick="manageQuiz(parseInt(document.getElementsByTagName('p')[0].id) + 1)"> Next </button> 
+            <br><br>
+
+            <h1 id="score" style="display: none;"> Your score: </h1>
+        </div>
+    </body>
+</html>

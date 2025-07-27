@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function loadScript(src, callback) {
+                let script = document.createElement('script')
+                script.src = src
+                script.onload = () => callback(script)
+                document.head.append(script)
+            }
+
+            loadScript('/Users/asadkhonrasulov/ZIOX_314/TenWeekRoadMap/Week1/myScript.js', function() {
+                newFunction()
+            })
+        </script>
+    </head>
+    <body>
+        
+    </body>
+</html>
