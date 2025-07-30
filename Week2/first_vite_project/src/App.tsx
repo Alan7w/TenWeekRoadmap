@@ -1,16 +1,30 @@
-import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import Greeting from './Greetings'
+import UserProfile from './components/UserProfile'
+// import Greeting from './Greetings'
+// import UserProfile from './components/UserProfile'
+import Counter from './components/Counter'
+import avatarImage from '../images/avatarImage.png'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <div>
-        <Greeting name="Asadkhon" />
+        {/*Week2 day 2 Userprofile*/}
+        {/* <UserProfile
+          name="Asad"
+          avatarUrl={avatarImage}
+          email="asad@example.com"
+          bio="I am 22 years old!"
+        /> */}
+
+        {/** Week2 day 3 Userprofile useState avatarUrl*/}
+        <UserProfile
+          name="Alan"
+          avatarUrl={avatarImage}
+          email="asadkonr@gmail.com"
+        />
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
@@ -20,9 +34,9 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+        {/*Week2 day 1 Greetings props*/}
+        {/* <Greeting name='Alan' message="You are 22 years old!" count={22}/> */}
+        <Counter step={2}/>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
