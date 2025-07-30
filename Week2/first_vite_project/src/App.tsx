@@ -2,8 +2,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import UserProfile from './components/UserProfile'
-// import Greeting from './Greetings'
-// import UserProfile from './components/UserProfile'
+import Greeting from './Greetings'
 import Counter from './components/Counter'
 import avatarImage from '../images/avatarImage.png'
 
@@ -12,12 +11,12 @@ function App() {
     <>
       <div>
         {/*Week2 day 2 Userprofile*/}
-        {/* <UserProfile
+        <UserProfile
           name="Asad"
           avatarUrl={avatarImage}
           email="asad@example.com"
           bio="I am 22 years old!"
-        /> */}
+        />
 
         {/** Week2 day 3 Userprofile useState avatarUrl*/}
         <UserProfile
@@ -35,7 +34,7 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
         {/*Week2 day 1 Greetings props*/}
-        {/* <Greeting name='Alan' message="You are 22 years old!" count={22}/> */}
+        <Greeting name='Alan' message="You are 22 years old!" count={22}/>
         <Counter step={2}/>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
