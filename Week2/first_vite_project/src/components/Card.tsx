@@ -12,14 +12,22 @@ const cardStyleMap = {
   elevated: {
     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
     background: 'darkgrey',
-    padding: '1rem',
-    borderRadius: '0.5rem',
+    padding: '1.5rem',
+    borderRadius: '0.75rem',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '1rem',
+    height: 'fit-content'
   },
   outlined: {
     border: '1px solid #ddd',
     background: 'darkgrey',
-    padding: '1rem',
-    borderRadius: '0.5rem',
+    padding: '1.5rem',
+    borderRadius: '0.75rem',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '1rem',
+    height: 'fit-content'
   },
 }
 

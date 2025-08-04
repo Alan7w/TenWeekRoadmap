@@ -1,17 +1,28 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 interface CounterProps {
     step?: number
+    label?: string
+    id?: string // Add unique identifier
 }
 
 function Counter (props: CounterProps) {
-    const [count, setCount] = useState(0)
+    const STORAGE_KEY = `counter-${props.id || 'default'}`
+    
+    const [count, setCount] = useState(() => {
+        const savedCount = localStorage.getItem(STORAGE_KEY)
+        return savedCount ? parseInt(savedCount, 10) : 0
+    })
+    
+    useEffect(() => {
+        localStorage.setItem(STORAGE_KEY, count.toString())
+    }, [count, STORAGE_KEY])
     return (
         <div>
             <button onClick={() => setCount(count => {
                 return count + (props.step || 1)
             })}>
-                Count is {count}
+                {props.label ||  "Count is "}: {count}
             </button>
         </div>
     )

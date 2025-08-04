@@ -1,5 +1,9 @@
 import { useState } from "react"
 
+// import avatarImage from '../images/avatarImage.png'
+// import flagstaff from '../images/flagstaff.png'
+import crushpose from '../../images/crushpose.jpeg'
+
 interface UserProfileProps {
     name: string
     avatarUrl?: string
@@ -9,7 +13,7 @@ interface UserProfileProps {
 
 function UserProfile (props: UserProfileProps) {
     const {name, email, bio} = props
-    const defaultAvatar = "https://github.com/identicons/jasonlong.png"
+    const defaultAvatar = crushpose
     const [currentAvatarUrl, setCurrentAvatarUrl] = useState(props.avatarUrl || defaultAvatar)
     const [inputValue, setInputValue] = useState("")
     const defaultBio = "This is a placeholder bio!"
@@ -26,6 +30,8 @@ function UserProfile (props: UserProfileProps) {
             <img 
                 src={currentAvatarUrl} 
                 alt={currentAvatarUrl == defaultAvatar ? `Default avatar for ${name}` : `${name}'s avatar`} 
+                width={"250px"}
+                height={"300px"}
             />
             <br />
             <input 
@@ -33,8 +39,8 @@ function UserProfile (props: UserProfileProps) {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
             />
-            <button onClick={updateAvatar}>Update Avatar</button>
-            <button onClick={() => setCurrentAvatarUrl(defaultAvatar)}>Reset Avatar</button>
+            <button onClick={updateAvatar} style={{margin: "0.5rem 1rem"}}>Update Avatar</button>
+            <button onClick={() => setCurrentAvatarUrl(defaultAvatar)} style={{margin: "0.5rem 1rem"}}>Reset Avatar</button>
             <h2>{name}</h2>
             <p>{email}</p>
             <p>{bio || defaultBio}</p>
