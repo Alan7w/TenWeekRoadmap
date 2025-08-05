@@ -1,6 +1,7 @@
 import './App.css'
 // import CatFacts from './components/CatFacts'
 import WeatherApp from './components/WeatherApp'
+import SignUpForm from './components/SignUpForm'
 
 function App() {
 
@@ -13,6 +14,8 @@ function App() {
       </CatFacts> */}
 
       <WeatherApp></WeatherApp>
+
+      <SignUpForm></SignUpForm>
     </>
   )
 }
