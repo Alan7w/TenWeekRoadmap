@@ -38,6 +38,7 @@
 
 .inputStyle {
     padding: 0.75rem;
+    padding-right: 2.5rem;
     font-size: 1rem;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
@@ -64,4 +65,11 @@
     color: green;
     text-align: center;
     margin-bottom: 2rem;
+}
+
+.passwordRequirementsStyle {
+    color: red;
+    margin: 0.5rem;
+    text-align: left;
+    font-weight: 600;
 }
