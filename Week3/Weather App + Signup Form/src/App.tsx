@@ -1,53 +1,25 @@
 import './App.css'
-import './components/TodoList.css'
 // import CatFacts from './components/CatFacts'
-import WeatherApp from './components/WeatherApp'
-import SignUpForm from './components/SignUpForm'
-import TodoList from './components/TodoList'
-import { useState } from 'react'
+import { Link, Route, Routes} from 'react-router-dom'
+import WeatherPage from './pages/WeatherPage'
+import SignUpPage from './pages/SigUpPage'
+import TodoListPage from './pages/TodoListPage'
 
 function App() {
-
-  const [todos, setTodos] = useState([
-    { id: 543, text: 'Learn React',       completed: false },
-    { id: 222, text: 'Build a Todo App',  completed: false },
-    { id: 3245, text: 'Deploy to Vercel',  completed: false },
-    { id: 7656, text: 'Write Tests',       completed: false }
-  ])
-
-  function handleToggle (id:number) {
-    const updatedTodos = todos.map(todo => todo.id == id ? { ...todo, completed: !todo.completed } : todo)
-    setTodos(updatedTodos)
-  }
-
-  function handleDelete(id:number) {
-    const updatedTodos = todos.filter(todo => todo.id !== id)
-    setTodos(updatedTodos)
-  }
-
+  // Project: Weather, Todo & Signup Dashboard
   return (
     <>
-      <div className='todoListContainerStyle'>
-        <h2 className='todoHeaderStyle'>Todo List</h2>
-        <TodoList
-          items={todos}
-          onToggle={handleToggle}
-          onDelete={handleDelete}
-        />
-
-        <button className='addTodoButtonStyle'>Add Todo</button>
-        <button className='restoreTodosButtonStyle'>Restore Todos</button>
-      </div>
-
-      <h1>Weather App and Signup Form</h1>
-      <p>Welcome to the Weather App and Signup Form project!</p>
-
-      {/* <CatFacts>
-      </CatFacts> */}
-
-      <WeatherApp></WeatherApp>
-
-      <SignUpForm></SignUpForm>
+      <h1>Weather, Todo & Signup Dashboard</h1>
+      <nav>
+        <Link to="/"> Home </Link>
+        <Link to="/signup"> Sign Up </Link>
+        <Link to="/todos"> Todo List </Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<WeatherPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/todos" element={<TodoListPage/>}/>
+      </Routes>
     </>
   )
 }

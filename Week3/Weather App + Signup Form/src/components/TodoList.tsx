@@ -1,4 +1,4 @@
-import TodoItem from "./ToDoItem"
+import TodoItem from "./TodoItem"
 
 interface TodoListProps {
     items: Array <{

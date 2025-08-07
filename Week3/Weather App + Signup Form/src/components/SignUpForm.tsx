@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import "./SignUpForm.css";
+import "../styles/SignUpForm.css";
 
 function SignUpForm () {
 

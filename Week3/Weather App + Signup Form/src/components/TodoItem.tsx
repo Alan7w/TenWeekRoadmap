@@ -1,4 +1,4 @@
-import './TodoList.css'
+import '../styles/TodoList.css'
 
 interface TodoItemProps {
     id: number
