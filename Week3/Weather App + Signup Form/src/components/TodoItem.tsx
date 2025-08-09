@@ -12,7 +12,8 @@ function TodoItem (props: TodoItemProps) {
     return (
         <div className="todoItemStyle">
             <label className={props.completed ? 'todoLabelCompleted' : 'todoLabelStyle'} htmlFor={props.text}>{props.text}</label>
-            <input 
+            <input
+                className='todoCheckboxStyle'
                 id={props.text} 
                 type="checkbox" 
                 checked={props.completed} 

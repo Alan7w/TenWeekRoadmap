@@ -9,17 +9,21 @@ function App() {
   // Project: Weather, Todo & Signup Dashboard
   return (
     <>
-      <h1>Weather, Todo & Signup Dashboard</h1>
-      <nav>
-        <Link to="/"> Home </Link>
-        <Link to="/signup"> Sign Up </Link>
-        <Link to="/todos"> Todo List </Link>
-      </nav>
-      <Routes>
-        <Route path="/" element={<WeatherPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/todos" element={<TodoListPage/>}/>
-      </Routes>
+      <header className='app-header'>
+        <h1 className='dashboard-title'>Weather, Todo & Signup Dashboard</h1>
+        <nav className='nav-links'>
+          <Link className='nav-link' to="/"> Home </Link>
+          <Link className='nav-link' to="/signup"> Sign Up </Link>
+          <Link className='nav-link' to="/todos"> Todo List </Link>
+        </nav>
+      </header>
+      <div className='main-content'>
+        <Routes>
+          <Route path="/" element={<WeatherPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/todos" element={<TodoListPage/>}/>
+        </Routes>
+      </div>
     </>
   )
 }

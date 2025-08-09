@@ -47,12 +47,13 @@ function SignUpForm () {
         reqs.forEach(({ id, test }) => {
             const reqItem = document.getElementById(id);
             const valid = test(inputValue);
-            reqItem?.style.setProperty("color", valid ? "green" : "red");
+            reqItem?.style.setProperty("color", valid ? "lightgreen" : "darkgray");
             if (valid) validCount++;
         });
         return validCount == reqs.length;
     }
 
+    const disableCheck = !formData.name || !formData.email || !formData.password
     return (
         <div className="formContainerStyle" id="formContainer">
             <h1 className="headerStyle">This is the Signup Form</h1>
@@ -103,9 +104,9 @@ function SignUpForm () {
                 </ul>
 
                 <button 
-                    className="buttonStyle"
+                    className={disableCheck ? 'buttonStyleDisabled' : 'buttonStyle'}
                     type="submit"
-                    disabled = {!formData.name || !formData.email || !formData.password}                    
+                    disabled = {disableCheck}                    
                     onClick={() => {validateForm()}}
                 >
                     Sign Up
