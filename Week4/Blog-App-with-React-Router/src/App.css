@@ -1,5 +1,6 @@
 #root {
-  max-width: 1280px;
+  width: 100%;
+  background-image: linear-gradient(135deg, orange 0%, black 50%, white 100%);
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -12,16 +13,16 @@
   left: 20px;
   right: 20px;
   background-color: #12daae;
-  background-image: linear-gradient(135deg, #12daae 0%, #4f46e5 100%);
-  border-bottom: 2px solid #e2e8f0;
+  background-image: linear-gradient(135deg, orange 0%, black 50%, white 100%);
+  border-bottom: 5px solid #e2e8f0;
   border-radius: 100px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem 2rem;
+  padding: 0.5rem 1.2rem;
 }
 
 .dashboard-title {
-  margin: 0 0 1rem 0;
-  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  color: #f4f5f7;
   font-size: 1.8rem;
   font-weight: 600;
 }
@@ -30,14 +31,14 @@
 .nav-links {
   display: flex;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
 .nav-link {
   text-decoration: none;
   color: #ffffff;
   font-weight: 500;
-  padding: 0.5rem 1rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 10px;
   transition: all 0.2s ease;
 }
@@ -50,7 +51,7 @@
 
 /* Main content styles */
 .main-content {
-  margin-top: 150px;
+  margin-top: 100px;
   padding: 2rem;
   min-height: calc(100vh - 140px);
 }
@@ -79,34 +80,6 @@
   .main-content {
     margin-top: 120px;
     padding: 1rem;
-  }
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
   }
 }
 

@@ -4,13 +4,14 @@ import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import BlogPage from './pages/BlogPage'
 import NotFoundPage from './pages/NotFoundPage'
+import PostDetail from './pages/PostDetail'
 
 function App() {
   // Project: Blog App with React Router
   return (
     <>
       <header className='app-header'>
-        <h1 className='app-title'>Welcome to my Blog! :)</h1>
+        <h1 className='dashboard-title'>Welcome to my Blog! :)</h1>
         <nav className='nav-links'>
           <Link className='nav-link' to='/'>Home</Link>
           <Link className='nav-link' to='/about'>About</Link>
@@ -24,6 +25,7 @@ function App() {
           <Route path='/home' element={<HomePage />} />
           <Route path='/about' element={<AboutPage />} />
           <Route path='/blog' element={<BlogPage />} />
+          <Route path='/blog/:id' element={<PostDetail />} />
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </div>
