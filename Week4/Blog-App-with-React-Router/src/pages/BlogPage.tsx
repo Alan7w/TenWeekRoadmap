@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Card from "../components/Card";
+import '../styles/BlogPage.css'
 
 function BlogPage() {
     document.title = 'App | Blog';
@@ -29,20 +31,26 @@ function BlogPage() {
             })
     }, [])
 
-    if (error) return <div style={{ marginTop: '50px', color: 'red' }}>Posts Could Not Be Loaded: {error}</div>
-    if (loading) return <div style={{ marginTop: '50px' }}>Loading posts ...</div>
-
-    console.log(posts)
+    if (error) return <div className="errorStyle">Posts Could Not Be Loaded: {error}</div>
+    if (loading) return <h3>Loading posts ...</h3>
 
     return (
         <div>
             <h1>Welcome to the Blog Page</h1>
             <p>Below are the blog posts:</p>
-            <ol>
+            <div className="blogsContainer">
                 {posts?.map(post => {
-                    return <li key={post.id}><Link to={`/blog/${post.id}`}>{post.title}</Link></li>
+                    return (
+                    <Card variant="outlined" className="cardStyle">
+                        <h4>{post.id}</h4>
+                        <h3 className="h3">{post.title}</h3>
+                        <p className="p">{post.body}</p>
+                        <button className="readMoreButtonStyle">
+                            <Link to={`/blog/${post.id}`}>Read more</Link>
+                        </button>
+                    </Card>)
                 })}
-            </ol>
+            </div>   
         </div>
     )
 }

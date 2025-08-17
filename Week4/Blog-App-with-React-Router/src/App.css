@@ -1,22 +1,44 @@
 #root {
   width: 100%;
-  background-image: linear-gradient(135deg, orange 0%, black 50%, white 100%);
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Fixed background with optimized blur */
+#root::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./images/app_background.jpg');
+  image-rendering: optimizeSpeed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(8px);
+  transform: translateZ(0);
+  will-change: transform;
+  z-index: -1;
 }
 
 /* Fixed Header Styles */
 .app-header {
+  font-family: 'Courier New', Courier, monospace;
   position: absolute;
   top: 20px;
   left: 20px;
   right: 20px;
-  background-color: #12daae;
-  background-image: linear-gradient(135deg, orange 0%, black 50%, white 100%);
-  border-bottom: 5px solid #e2e8f0;
+  /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); */
+  background: rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(20px);
+  border-bottom: 5px solid #3a567a;
   border-radius: 100px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1.2rem;
 }
 
@@ -41,23 +63,28 @@
   padding: 0.25rem 0.75rem;
   border-radius: 10px;
   transition: all 0.2s ease;
+  transform: translateZ(0);
+  will-change: transform, background-color;
 }
 
 .nav-link:hover {
   background-color: #f7fafc;
   color: #4f46e5;
-  transform: translateY(-1px);
+  transform: translateY(-1px) translateZ(0);
 }
 
 /* Main content styles */
 .main-content {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 500;
+  color: #f4f5f7;
   margin-top: 100px;
   padding: 2rem;
   min-height: calc(100vh - 140px);
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1000px) {
   .app-header {
     padding: 1rem;
   }
