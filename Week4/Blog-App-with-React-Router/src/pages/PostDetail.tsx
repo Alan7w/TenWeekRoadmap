@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import '../styles/PostDetail.css';
 
 function PostDetail () {
     type Post = {
@@ -28,8 +29,8 @@ function PostDetail () {
             })
     }, [id])
 
-    if (error) return <div style={{ marginTop: '50px', color: 'red' }}>Post Not Found: {error}</div>
-    if (loading) return <div style={{ marginTop: '50px' }}>Loading the post ...</div>
+    if (error) return <div className="errorStyle">Post Not Found: {error}</div>
+    if (loading) return <h3>Loading the post ...</h3>
 
     console.log(post)
 
@@ -39,8 +40,10 @@ function PostDetail () {
         <div>
             <h1>Post Detail Page</h1>
             <p>This is the detail page for a specific post.</p>
-            <h3>{post?.title}</h3>
-            <p>{post?.body}</p>
+            <div className='postCardStyle'>
+                <h2>{post?.title}</h2>
+                <p>{post?.body}</p>
+            </div>
         </div>
     );
 }
