@@ -26,10 +26,8 @@
   z-index: -1;
 }
 
-/* Fixed Header Styles */
 .app-header {
   font-family: 'Courier New', Courier, monospace;
-  position: absolute;
   top: 20px;
   left: 20px;
   right: 20px;
@@ -61,6 +59,7 @@
   color: #ffffff;
   font-weight: 500;
   padding: 0.25rem 0.75rem;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   transition: all 0.2s ease;
   transform: translateZ(0);

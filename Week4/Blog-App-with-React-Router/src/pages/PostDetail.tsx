@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import '../styles/PostDetail.css';
 
-function PostDetail () {
+function PostDetail () {    
     type Post = {
         id: number
         body: string
