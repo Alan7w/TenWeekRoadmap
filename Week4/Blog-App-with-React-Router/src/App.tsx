@@ -5,6 +5,7 @@ import AboutPage from './pages/AboutPage'
 import BlogPage from './pages/BlogPage'
 import NotFoundPage from './pages/NotFoundPage'
 import PostDetail from './pages/PostDetail'
+import './App.css'
 
 function App() {
   // Project: Blog App with React Router

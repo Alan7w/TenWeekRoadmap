@@ -16,7 +16,7 @@ const cardStyleMap = {
     borderRadius: '0.75rem',
     gap: '1rem',
     height: 'fit-content',
-  },
+  }
 }
 
 function Card (props: CardProps) {

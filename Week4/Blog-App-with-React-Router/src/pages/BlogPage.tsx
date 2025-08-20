@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "../components/Card";
 import '../styles/BlogPage.css'
+import BlogsListSkeleton from "../components/BlogsListSkeleton";
 
 function BlogPage() {
     document.title = 'App | Blog';
@@ -19,20 +20,30 @@ function BlogPage() {
 
     useEffect(() => {
         setLoading(true)
-        fetch ('https://jsonplaceholder.typicode.com/posts')
+        const controller = new AbortController();
+        fetch ('https://jsonplaceholder.typicode.com/posts', {signal: controller.signal})
             .then (response => response.json())
             .then (data => {
                 setPosts(data)
                 setLoading(false)
             })
             .catch(error => {
-                setError(error.message || "Something went wrong!")
+                setError(error.message ? error.message : "Something went wrong!")
                 setLoading(false)
+                controller.abort()
             })
     }, [])
 
-    if (error) return <div className="errorStyle">Posts Could Not Be Loaded: {error}</div>
-    if (loading) return <h3>Loading posts ...</h3>
+    if (error) {
+        return (
+            <div className="outlined">
+                <h1 className="errorStyle">Posts Could not be Loaded: {error}</h1>
+                <br />
+                <button className="tryAgainButtonStyle" onClick={() => window.location.reload()}>Try again</button>
+            </div>
+        )
+    }
+    if (loading) return <BlogsListSkeleton />
 
     return (
         <div>
