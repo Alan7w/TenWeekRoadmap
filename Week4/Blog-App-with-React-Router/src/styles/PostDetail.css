@@ -14,18 +14,28 @@
     height: fit-content;
 }
 
-.tryAgainButtonStyle {
+.tryAgainButtonStyle, .previousPostButton, 
+.nextPostButton, .backToBlogButton {
     background: rgba(0, 0, 0, 0.3);
     color: aquamarine;
     border: none;
+    margin: 1rem;
     padding: 0.5rem 1rem;
     cursor: pointer;
     border-radius: 4px;
     transition: background 0.1s ease;
 }
 
-.tryAgainButtonStyle:hover {
+.tryAgainButtonStyle:hover, .previousPostButton:hover, 
+.nextPostButton:hover, .backToBlogButton:hover {
     background-color: #f7fafc;
     color: #4f46e5;
     transform: translateY(-1px) translateZ(0);
+}
+
+.postsNavigationContainer {
+    display: flex;
+    flex-direction: row;
+    margin: 3rem 0 0.5rem;
+    justify-content: center;
 }

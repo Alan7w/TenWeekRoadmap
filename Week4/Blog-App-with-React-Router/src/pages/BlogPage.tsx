@@ -56,9 +56,7 @@ function BlogPage() {
                         <h4>{post.id}</h4>
                         <h3 className="h3">{post.title}</h3>
                         <p className="p">{post.body}</p>
-                        <button className="readMoreButtonStyle">
-                            <Link to={`/blog/${post.id}`}>Read more</Link>
-                        </button>
+                        <Link className="readMoreButtonStyle" to={`/blog/${post.id}`}>Read more</Link>
                     </Card>)
                 })}
             </div>   

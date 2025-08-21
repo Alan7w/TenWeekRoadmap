@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import '../styles/PostDetail.css';
 import PostDetailSkeleton from "../components/PostDeatilSkeleton";
@@ -52,6 +52,11 @@ function PostDetail () {
             <div className='postCardStyle'>
                 <h2>{post?.title ? post.title : "The post with id " + id + " cannot be found!"}</h2>
                 <p>{post?.body}</p>
+                <div className="postsNavigationContainer">
+                    <Link className="previousPostButton" to={`/blog/${id ? parseInt(id) - 1 : 0}`}>Previous Post</Link>
+                    <Link className="nextPostButton" to={`/blog/${id ? parseInt(id) + 1 : 0}`}>Next Post</Link>
+                </div>
+                <Link className="backToBlogButton" to="/blog">Back to Blog</Link>
             </div>
         </div>
     );

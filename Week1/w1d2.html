@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!-- Calculator -->
+
+<html>
+    <head>
+        <link rel="stylesheet" href="w1d2.css">
+        <script>
+            // Dynamic calculator
+            const add = (a, b) => a + b
+            const subtract = (a, b) => a - b
+            const divide = (a, b) => a / b
+            const multiply = (a, b) => a * b
+            const squareRoot = (a) => Math.sqrt(a)
+            const findPercentOfNumbers = (a, b) => (a / 100) * b
+            const findPercentOfNumber = (a) => a / 100
+            const calculate = (a, b, op) => {
+                if (isNaN(a) || isNaN(b)) {
+                    console.log("Inputs must be numbers")
+                    return
+                } else {
+                    return op(a, b)
+                }
+            }
+
+            function handleInputAndCalculate (input) {
+                const inputField = document.getElementById("expressionInput")
+
+                if (input == 'equal') {
+                    console.log(typeof(inputField.value))
+                    if (inputField.value.includes("sqrt")) {
+                        console.log(inputField.value[-2])
+                    }
+                } else if (input == 'sqrt') {
+                    if (inputField.value) {
+                        inputField.value = 'sqrt(' + inputField.value + ')'
+                    }
+                    inputField.focus()
+                } else if (input == "multiply") {
+                    inputField.value += "x"
+                    inputField.focus()
+                } else {
+                    inputField.value += input
+                    inputField.focus()
+                }
+            }
+            
+            function handleNumberInput (number) {
+                const inputField = document.getElementById("expressionInput")
+                inputField.value += number
+                inputField.focus()
+            }
+
+            function handleClear () {
+                const inputField = document.getElementById("expressionInput")
+                inputField.value = ""
+                inputField.focus()
+            }
+
+            function handleErase () {
+                const inputField = document.getElementById("expressionInput")
+                inputField.value = inputField.value.slice(0, -1)
+                inputField.focus()
+            }
+        </script>
+    </head>
+    
+    <body class="mainContent">
+        <div>
+            <input type="text" id="expressionInput" class="inputFieldStyle" onchange="handleInputAndCalculate('equal')">
+            <div class="buttonsStyle">
+                <div class="buttonsRowStyle">
+                    <button id="sqrtButton" class="sqrtButtonStyle" onclick="handleInputAndCalculate('sqrt')"> √ </button>
+                    <button id="percentButton" class="percentButtonStyle" onclick="handleInputAndCalculate('percent')"> % </button>
+                    <button id="clearButton" class="clearButtonStyle" onclick="handleClear()"> C </button>
+                    <button id="eraseButton" class="eraseButtonStyle" onclick="handleErase()"> X </button>
+                </div>
+                <div class="buttonsRowStyle">
+                    <button id="sevenButton" class="numberButtonStyle" onclick="handleNumberInput(7)"> 7 </button>
+                    <button id="eightButton" class="numberButtonStyle" onclick="handleNumberInput(8)"> 8 </button>
+                    <button id="nineButton" class="numberButtonStyle" onclick="handleNumberInput(9)"> 9 </button>
+                    <button id="divideButton" class="divideButtonStyle" onclick="handleInputAndCalculate('divide')"> / </button>
+                </div>
+                <div class="buttonsRowStyle">
+                    <button id="fourButton" class="numberButtonStyle" onclick="handleNumberInput(4)"> 4 </button>
+                    <button id="fiveButton" class="numberButtonStyle" onclick="handleNumberInput(5)"> 5 </button>
+                    <button id="sixButton" class="numberButtonStyle" onclick="handleNumberInput(6)"> 6 </button>
+                    <button id="multiplyButton" class="multiplyButtonStyle" onclick="handleInputAndCalculate('multiply')"> * </button>
+                </div>
+                <div class="buttonsRowStyle">
+                    <button id="oneButton" class="numberButtonStyle" onclick="handleNumberInput(1)"> 1 </button>
+                    <button id="twoButton" class="numberButtonStyle" onclick="handleNumberInput(2)"> 2 </button>
+                    <button id="threeButton" class="numberButtonStyle" onclick="handleNumberInput(3)"> 3 </button>
+                    <button id="addButton" class="addButtonStyle" onclick="handleInputAndCalculate('add')"> + </button>
+                </div>
+                <div class="buttonsRowStyle">
+                    <button id="zeroButton" class="numberButtonStyle" onclick="handleNumberInput(0)"> 0 </button>
+                    <button id="decimalButton" class="decimalButtonStyle" onclick="handleInputAndCalculate('decimal')"> . </button>
+                    <button id="equalButton" class="equalButtonStyle" onclick="handleInputAndCalculate('equal')"> = </button>
+                    <button id="subtractButton" class="subtractButtonStyle" onclick="handleInputAndCalculate('subtract')"> - </button>
+            </div>
+        </div>
+    </body>
+</html>
