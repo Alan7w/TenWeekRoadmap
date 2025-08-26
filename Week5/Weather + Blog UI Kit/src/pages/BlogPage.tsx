@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "../components/Card";
-import '../styles/BlogPage.css'
 import BlogsListSkeleton from "../components/BlogsListSkeleton";
 import Button from "../components/ui/Button";
 
@@ -38,32 +37,73 @@ function BlogPage() {
 
     if (error) {
         return (
-            <div className="outlined">
-                <h1 className="errorStyle">Posts Could not be Loaded: {error}</h1>
-                <br />
-                <button className="tryAgainButtonStyle" onClick={() => window.location.reload()}>Try again</button>
+            <div className="max-w-2xl mx-auto mt-8 p-8 bg-white/80 backdrop-blur-sm border border-red-200 rounded-xl shadow-lg">
+                <h1 className="text-3xl font-bold text-red-600 mb-4 text-center">
+                    Posts Could not be Loaded: {error}
+                </h1>
+                <div className="text-center">
+                    <Button 
+                        size="large" 
+                        variant="secondary" 
+                        onClick={() => window.location.reload()}
+                        className="bg-sample-500 hover:bg-sample-600 text-white"
+                    >
+                        Try again
+                    </Button>
+                </div>
             </div>
         )
     }
+
     if (loading) return <BlogsListSkeleton />
 
     return (
-        <div>
-            <h1>Welcome to the Blog Page</h1>
-            <p>Below are the blog posts:</p>
-            <div className="blogsContainer">
-                {posts?.map(post => {
-                    return (
-                    <Card variant="outlined" className="cardStyle">
-                        <h4>{post.id}</h4>
-                        <h3 className="h3">{post.title}</h3>
-                        <p className="p">{post.body}</p>
-                        <Button variant="primary" size="small" onClick={() => navigate(`/blog/${post.id}`)}>
-                            Read More
-                        </Button>
-                    </Card>)
-                })}
-            </div>   
+        <div className="space-y-8">
+            <div className="text-center space-y-4">
+                <h1 className="text-4xl md:text-5xl font-bold text-sample-800 mb-2">
+                    Welcome to the Blog Page
+                </h1>
+                <p className="text-lg text-sample-600 max-w-2xl mx-auto">
+                    Below are the blog posts - discover insights, stories, and knowledge.
+                </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                {posts?.map(post => (
+                    <Card 
+                        key={post.id}
+                        variant="outlined" 
+                        className="bg-white/90 backdrop-blur-sm border-sample-200 hover:border-sample-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-fit group"
+                    >
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-start">
+                                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sample-100 text-sample-800">
+                                    Post #{post.id}
+                                </span>
+                            </div>
+
+                            <h3 className="text-lg font-semibold text-sample-900 line-clamp-2 group-hover:text-sample-700 transition-colors">
+                                {post.title}
+                            </h3>
+
+                            <p className="text-sample-600 text-sm line-clamp-4 leading-relaxed">
+                                {post.body}
+                            </p>
+
+                            <div className="pt-2">
+                                <Button 
+                                    variant="primary" 
+                                    size="small" 
+                                    onClick={() => navigate(`/blog/${post.id}`)}
+                                    className="w-full bg-sample-600 hover:bg-sample-700 text-white"
+                                >
+                                    Read More
+                                </Button>
+                            </div>
+                        </div>
+                    </Card>
+                ))}
+            </div>
         </div>
     )
 }

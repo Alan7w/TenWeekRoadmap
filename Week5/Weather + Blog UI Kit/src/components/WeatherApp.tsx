@@ -1,7 +1,6 @@
 import { useState } from "react"
-import '../styles/WeatherApp.css'
-import Button from "./ui/Button";
-import Input from "./ui/Input";
+import Input from './ui/Input'
+import Button from './ui/Button'
 
 interface WeatherData {
     main?: {
@@ -13,16 +12,11 @@ interface WeatherData {
 
 function WeatherApp() {
     const [city, setCity] = useState<string>("")
-
     const [weatherData, setWeatherData] = useState<WeatherData>({})
     const [loading, setLoading] = useState<boolean>(false)
-    const [error, setError] = useState(null)
+    const [error, setError] = useState<string | null>(null)
 
-    // render a text input for city name
-    // render a "Get Weather" button disabled if city is empty
-    // on button click, fetch weather data from an API
-
-    function fetchWeatherData () {
+    function fetchWeatherData() {
         console.log(city)
         setLoading(true)
         setError(null)
@@ -34,58 +28,96 @@ function WeatherApp() {
         url.searchParams.set("units", "metric")
 
         fetch(url.toString())
-            .then (response => {
+            .then(response => {
                 if (!response.ok) throw new Error(`${response}`)
                 console.log(response)
                 return response.json()
             })
-            .then (data => {
+            .then(data => {
                 setWeatherData(data)
                 setLoading(false)
             })
-            .catch (error => {
+            .catch(error => {
                 setError(error.message || "An error occurred while fetching weather data.");
                 setLoading(false);
             })
     }
 
     return (
-        <div className="weather-app-container">
-            <h1 className="weather-app-title">Weather App</h1>
-            <p className="weather-app-subtitle">Welcome to the Weather App! <br /> Stay tuned for weather updates.</p>
-
-            <div className="weather-search-form">
-                <Input 
-                    className="weather-search-input"
-                    label="City name: "
-                    id="city" 
-                    type="text" 
-                    value={city} 
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCity(e.target.value)}
-                /> 
-                <Button 
-                    onClick={fetchWeatherData} 
-                    disabled={!city}
-                    variant="primary"
-                    size="medium"
-                > 
-                    Get Weather 
-                </Button>
-            </div>
-
-            {/* Display temperature, humidity, description */}
-            {loading && <p> Loading ...</p>}
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {weatherData.main && (
-                <div className="weather-info">
-                    <h2 className="weather-info-city"> Weather at {city}</h2>
-                    <p className="weather-info-temp">Temperature: {weatherData.main.temp}°K</p>
-                    <p className="weather-info-humidity">Humidity: {weatherData.main.humidity}%</p>
-                    <p className="weather-info-desc">Description: {weatherData.weather && weatherData.weather[0] ? weatherData.weather[0].description : "No description available"}</p>
+        <div className="max-w-md mx-auto mt-8">
+            <div className="bg-gradient-to-br from-sample-500 to-sample-700 rounded-2xl shadow-2xl p-8 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full"></div>
+                <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-white/5 rounded-full"></div>
+                
+                <div className="relative z-10 text-center mb-8">
+                    <h1 className="text-3xl font-bold mb-2">Weather App</h1>
+                    <p className="text-sample-100 text-sm">
+                        Welcome to the Weather App! <br />
+                        Stay tuned for weather updates.
+                    </p>
                 </div>
-            )}
+
+                <div className="relative z-10 space-y-4 mb-6">
+                    <Input 
+                        label="City name:" 
+                        id="city" 
+                        type="text" 
+                        value={city} 
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCity(e.target.value)}
+                        placeholder="Enter city name..."
+                        className="bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:border-white focus:ring-white/30"
+                    /> 
+                    <Button 
+                        onClick={fetchWeatherData} 
+                        disabled={!city || loading}
+                        variant="secondary"
+                        size="medium"
+                        className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 hover:border-white/50"
+                    > 
+                        {loading ? "Loading..." : "Get Weather"}
+                    </Button>
+                </div>
+
+                {error && (
+                    <div className="relative z-10 bg-red-500/20 border border-red-400/30 rounded-lg p-4 mb-4">
+                        <p className="text-red-100 text-sm font-medium">{error}</p>
+                    </div>
+                )}
+
+                {weatherData.main && (
+                    <div className="relative z-10 bg-white/10 backdrop-blur-sm rounded-xl p-6 space-y-4">
+                        <h2 className="text-xl font-semibold text-center mb-4">
+                            Weather in {city}
+                        </h2>
+                        
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="text-center">
+                                <div className="text-3xl font-bold">
+                                    {Math.round(weatherData.main.temp)}°C
+                                </div>
+                                <div className="text-sample-100 text-sm">Temperature</div>
+                            </div>
+                            
+                            <div className="flex justify-between items-center bg-white/10 rounded-lg p-3">
+                                <span className="text-sample-100">Humidity:</span>
+                                <span className="font-semibold">{weatherData.main.humidity}%</span>
+                            </div>
+                            
+                            <div className="flex justify-between items-center bg-white/10 rounded-lg p-3">
+                                <span className="text-sample-100">Description:</span>
+                                <span className="font-semibold capitalize">
+                                    {weatherData.weather && weatherData.weather[0] ? 
+                                        weatherData.weather[0].description : 
+                                        "No description available"
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
 
-export default WeatherApp;
+export default WeatherApp

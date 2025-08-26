@@ -1,35 +1,27 @@
 interface CardProps {
     children: React.ReactNode
-    header?: React.ReactNode
-    footer?: React.ReactNode
-    variant: 'outlined'
+    variant?: 'outlined' | 'filled' | 'elevated'
     className?: string
-    style?: React.CSSProperties
 }
 
-const cardStyleMap = {
-  outlined: {
-    margin: '15px',
-    border: '1px solid #ddd',
-    background: 'rgba(0, 0, 0, 0.3)',
-    padding: '1.5rem',
-    borderRadius: '0.75rem',
-    gap: '1rem',
-    height: 'fit-content',
-  }
-}
+function Card(props: CardProps) {
+    const { children, variant = 'outlined', className = "" } = props
 
-function Card (props: CardProps) {
-    const {children, header, footer, variant, className="", style} = props
+    const baseClasses = "rounded-xl p-6 transition-all duration-300"
+    
+    const variantClasses = {
+        outlined: "border-2 border-sample-200 bg-white/90 backdrop-blur-sm hover:border-sample-400 hover:shadow-lg",
+        filled: "bg-sample-100 border border-sample-200 hover:bg-sample-200",
+        elevated: "bg-white shadow-lg hover:shadow-xl border border-sample-100"
+    }
 
-    const baseStyle = cardStyleMap[variant]
-    const combinedStyle = {...style, ...baseStyle}
+    const blogCardClasses = "h-80 w-full flex flex-col"
 
     return (
-        <div style={combinedStyle} className={className}>
-            {header}
-            {children}
-            {footer}
+        <div className={`${baseClasses} ${variantClasses[variant]} ${blogCardClasses} ${className}`}>
+            <div className="flex-1 flex flex-col justify-between">
+                {children}
+            </div>
         </div>
     )
 }

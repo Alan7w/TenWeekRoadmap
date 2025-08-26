@@ -22,9 +22,9 @@ function Button (props: ButtonProps) {
     const baseClass = "font-medium rounded-lg transition-all duration-200 cursor-pointer focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed"
 
     const variantClasses = {
-        primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300",
-        outlined: "border-2 border-blue-600 text-blue-600 hover:bg-blue-50 focus:ring-blue-300",
-        secondary: "bg-slate-200 text-slate-900 hover:bg-slate-300 focus:ring-slate-300"
+        primary: "bg-sample-600 text-white hover:bg-sample-700 focus:ring-sample-300",
+        outlined: "border-2 border-sample-600 text-sample-600 hover:bg-sample-50 focus:ring-sample-300",
+        secondary: "bg-sample-100 text-sample-800 hover:bg-sample-200 focus:ring-sample-300"
     }
     
     const sizeClasses = {
