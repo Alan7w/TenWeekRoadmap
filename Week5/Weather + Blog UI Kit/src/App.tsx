@@ -1,11 +1,27 @@
+import Navbar  from "./components/Navbar"
+import {Route, Routes} from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import AboutPage from './pages/AboutPage'
+import BlogPage from './pages/BlogPage'
+import NotFoundPage from './pages/NotFoundPage'
+import PostDetail from './pages/PostDetail'
 import './App.css'
+import WeatherApp from "./components/WeatherApp"
 
 function App() {
-
   return (
     <>
-      <div className="bg-blue-500 text-white p-4">
-        <h1 className="text-2xl font-bold">Hello Tailwind v4!</h1>
+      <Navbar />
+      <div className='main-content'>
+          <Routes>
+              <Route path='/' element={<HomePage />} />
+              <Route path='/home' element={<HomePage />} />
+              <Route path='/about' element={<AboutPage />} />
+              <Route path='/blog' element={<BlogPage />} />
+              <Route path='/blog/:id' element={<PostDetail />} />
+              <Route path='*' element={<NotFoundPage />} />
+              <Route path="/weather" element={<WeatherApp />} />
+          </Routes>
       </div>
     </>
   )

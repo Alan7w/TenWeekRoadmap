@@ -1,0 +1,64 @@
+.errorStyle {
+    font-size: 2rem;
+    color: rgb(247, 12, 12);
+    font-weight: 600;
+}
+
+.blogsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.outlined {
+    margin: 15px;
+    border: 1px solid #ddd;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    gap: 1rem;
+    height: fit-content;
+}
+
+.cardStyle {
+    width: 300px;
+    height: 400px;
+    margin: 1rem;
+    overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+    transition: transform 0.2s ease;
+}
+
+.cardStyle:hover {
+    transform: translateY(-2px) translateZ(0);
+}
+
+.cardStyle h3 {
+    height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cardStyle p {
+    height: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.readMoreButtonStyle, .tryAgainButtonStyle {
+    background: rgba(0, 0, 0, 0.3);
+    color: aquamarine;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.1s ease;
+}
+
+.readMoreButtonStyle:hover, .tryAgainButtonStyle:hover {
+    background-color: #f7fafc;
+    color: #4f46e5;
+    transform: translateY(-1px) translateZ(0);
+}
