@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Input from './ui/Input'
 import Button from './ui/Button'
+import WeatherAppSkeleton from "./WeatherAppSkeleton"
 
 interface WeatherData {
     main?: {
@@ -44,10 +45,10 @@ function WeatherApp() {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-8">
-            <div className="bg-gradient-to-br from-sample-500 to-sample-700 rounded-2xl shadow-2xl p-8 text-white relative overflow-hidden">
+        <div className="max-w-md mx-auto mt-8 px-4">
+            <div className="bg-gradient-to-br from-sample-500 to-sample-700 rounded-2xl shadow-2xl p-8 text-white relative">
                 <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full"></div>
-                <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-white/10 rounded-full"></div>
                 
                 <div className="relative z-10 text-center mb-8">
                     <h1 className="text-3xl font-bold mb-2">Weather App</h1>
@@ -65,12 +66,20 @@ function WeatherApp() {
                         value={city} 
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCity(e.target.value)}
                         placeholder="Enter city name..."
-                        className="bg-white/20 border-white/30 text-white placeholder:text-white/70 focus:border-white focus:ring-white/30"
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key == "Enter") {
+                                fetchWeatherData();
+                                setWeatherData({});
+                            }
+                        }}
+                        onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.placeholder = ""}
+                        onBlur={(e: React.FocusEvent<HTMLInputElement>) => e.target.placeholder = "Enter city name..."}
+                        className="bg-white/20 border-white/30 text-white text-center placeholder:text-white/70 focus:border-white focus:ring-white/30"
                     /> 
                     <Button 
-                        onClick={fetchWeatherData} 
+                        onClick={() => { fetchWeatherData(); setWeatherData({}); }} 
                         disabled={!city || loading}
-                        variant="secondary"
+                        variant="outlined"
                         size="medium"
                         className="w-full bg-white/20 hover:bg-white/30 text-white border-white/30 hover:border-white/50"
                     > 
@@ -80,9 +89,11 @@ function WeatherApp() {
 
                 {error && (
                     <div className="relative z-10 bg-red-500/20 border border-red-400/30 rounded-lg p-4 mb-4">
-                        <p className="text-red-100 text-sm font-medium">{error}</p>
+                        <p className="text-red-100 text-sm font-medium">Failed to fetch weather data: {error}</p>
                     </div>
                 )}
+
+                {loading && <WeatherAppSkeleton />}
 
                 {weatherData.main && (
                     <div className="relative z-10 bg-white/10 backdrop-blur-sm rounded-xl p-6 space-y-4">
@@ -90,7 +101,7 @@ function WeatherApp() {
                             Weather in {city}
                         </h2>
                         
-                        <div className="grid grid-cols-1 gap-4">
+                        <div className="grid gap-4">
                             <div className="text-center">
                                 <div className="text-3xl font-bold">
                                     {Math.round(weatherData.main.temp)}°C

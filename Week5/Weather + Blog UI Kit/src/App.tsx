@@ -12,8 +12,7 @@ function App() {
     <div className="min-h-screen bg-gradient-to-br from-sample-50 to-sample-100">
       <Navbar />
       
-      <main className="pt-24 px-4 sm:px-6 lg:px-8 pb-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="pt-24 px-4 sm:px-6 lg:px-8 pb-8 max-w-7xl mx-auto">
           <Routes>
             <Route path='/' element={<HomePage />} />
             <Route path='/home' element={<HomePage />} />
@@ -24,7 +23,6 @@ function App() {
             <Route path="/weather" element={<WeatherApp />} />
           </Routes>
         </div>
-      </main>
     </div>
   )
 }

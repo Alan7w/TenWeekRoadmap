@@ -75,12 +75,12 @@ function PostDetail() {
                     </span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl font-bold text-sample-900 mb-8 leading-tight">
+                <h1 className="text-3xl md:text-4xl font-bold text-sample-900 mb-8">
                     {post?.title || `The post with id ${id} cannot be found!`}
                 </h1>
 
                 <div className="prose prose-lg max-w-none">
-                    <p className="text-sample-700 text-lg leading-relaxed">
+                    <p className="text-sample-700 text-lg">
                         {post?.body}
                     </p>
                 </div>

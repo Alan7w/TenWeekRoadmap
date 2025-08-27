@@ -68,12 +68,12 @@ function BlogPage() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-12">
                 {posts?.map(post => (
                     <Card 
                         key={post.id}
-                        variant="outlined" 
-                        className="bg-white/90 backdrop-blur-sm border-sample-200 hover:border-sample-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-fit group"
+                        variant="filled" 
+                        className="bg-white/90 backdrop-blur-sm border-sample-200 hover:border-sample-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-fit"
                     >
                         <div className="space-y-4">
                             <div className="flex justify-between items-start">
@@ -86,7 +86,7 @@ function BlogPage() {
                                 {post.title}
                             </h3>
 
-                            <p className="text-sample-600 text-sm line-clamp-4 leading-relaxed">
+                            <p className="text-sample-600 text-sm line-clamp-3">
                                 {post.body}
                             </p>
 

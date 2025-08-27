@@ -22,15 +22,15 @@ function NotFoundPage() {
 
                 <div className="bg-white/80 backdrop-blur-sm border border-sample-200 rounded-xl p-6">
                     <div className="space-y-4">
-                        <div className="text-4xl">🔍</div>
+                        <span className="text-4xl">🔍</span>
                         <h2 className="text-xl font-semibold text-sample-800">
                             What can you do?
                         </h2>
                         <ul className="text-sample-600 space-y-2 text-left max-w-sm mx-auto">
-                            <li>• Check the URL for typos</li>
-                            <li>• Go back to the previous page</li>
-                            <li>• Visit our homepage</li>
-                            <li>• Browse our blog posts</li>
+                            <li>- Check the URL for typos </li>
+                            <li>- Go back to the previous page </li>
+                            <li>- Visit our homepage </li>
+                            <li>- Browse our blog posts </li>
                         </ul>
                     </div>
                 </div>
@@ -42,7 +42,7 @@ function NotFoundPage() {
                         onClick={() => navigate('/')}
                         className="bg-sample-600 hover:bg-sample-700 text-white"
                     >
-                        🏠 Go Home
+                        Go Home
                     </Button>
                     <Button
                         variant="outlined"
