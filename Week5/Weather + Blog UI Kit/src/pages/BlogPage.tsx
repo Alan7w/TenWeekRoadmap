@@ -68,29 +68,32 @@ function BlogPage() {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
                 {posts?.map(post => (
                     <Card 
                         key={post.id}
-                        variant="filled" 
-                        className="bg-white/90 backdrop-blur-sm border-sample-200 hover:border-sample-400 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 h-fit"
+                        variant="outlined" 
+                        className="h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                     >
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-start">
+                        <div className="h-full flex flex-col">
+                            <div className="flex justify-between items-start mb-4">
                                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-sample-100 text-sample-800">
                                     Post #{post.id}
                                 </span>
                             </div>
 
-                            <h3 className="text-lg font-semibold text-sample-900 line-clamp-2 group-hover:text-sample-700 transition-colors">
+                            {/* title */}
+                            <h3 className="text-lg font-semibold text-sample-900 mb-3 line-clamp-2 min-h-[3.5rem] leading-tight">
                                 {post.title}
                             </h3>
 
-                            <p className="text-sample-600 text-sm line-clamp-3">
+                            {/* body */}
+                            <p className="text-sample-600 text-sm line-clamp-3 leading-relaxed flex-1 mb-4">
                                 {post.body}
                             </p>
 
-                            <div className="pt-2">
+                            {/* read more button */}
+                            <div className="mt-auto border-t border-sample-200 p-2">
                                 <Button 
                                     variant="primary" 
                                     size="small" 

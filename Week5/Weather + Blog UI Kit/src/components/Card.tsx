@@ -15,13 +15,11 @@ function Card(props: CardProps) {
         elevated: "bg-white shadow-lg hover:shadow-xl border border-sample-100"
     }
 
-    const blogCardClasses = "h-80 w-full flex flex-col"
+    const cardClasses = "w-full flex flex-col"
 
     return (
-        <div className={`${baseClasses} ${variantClasses[variant]} ${blogCardClasses} ${className}`}>
-            <div className="flex-1 flex flex-col justify-between">
-                {children}
-            </div>
+        <div className={`${baseClasses} ${variantClasses[variant]} ${cardClasses} ${className}`}>
+            {children}
         </div>
     )
 }
