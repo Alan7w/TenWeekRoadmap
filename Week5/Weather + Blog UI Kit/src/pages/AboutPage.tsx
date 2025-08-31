@@ -1,7 +1,10 @@
+import PageTransition from "../components/PageTransition";
+
 function AboutPage() {
     document.title = 'App | About';
     return (
-        <div className="max-w-4xl mx-auto space-y-12">
+        <PageTransition>
+            <div className="max-w-4xl mx-auto space-y-12">
             {/* headline */}
             <div className="text-center space-y-4">
                 <h1 className="text-4xl md:text-5xl font-bold text-sample-800">
@@ -92,6 +95,7 @@ function AboutPage() {
                 </div>
             </div>
         </div>
+        </PageTransition>
     )
 }
 

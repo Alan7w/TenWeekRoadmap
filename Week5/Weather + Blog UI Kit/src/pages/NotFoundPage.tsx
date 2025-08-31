@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/ui/Button';
+import PageTransition from '../components/PageTransition';
 
 function NotFoundPage() {
     document.title = 'App | Not Found';
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-[60vh] flex items-center justify-center">
+        <PageTransition>
+            <div className="min-h-[60vh] flex items-center justify-center">
             <div className="text-center space-y-8 max-w-2xl mx-auto px-4">
                 <div className="space-y-4">
                     <div className="text-8xl md:text-9xl font-bold text-sample-300">
@@ -63,6 +65,7 @@ function NotFoundPage() {
                 </div>
             </div>
         </div>
+        </PageTransition>
     )
 }
 

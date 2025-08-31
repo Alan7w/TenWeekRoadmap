@@ -1,12 +1,14 @@
 import Button from "../components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import PageTransition from "../components/PageTransition";
 
 function HomePage() {
     document.title = 'App | Home';
     const navigate = useNavigate();
     return (
-        // Home page containter
-        <div className="text-center space-y-8 max-w-4xl mx-auto px-4">
+        <PageTransition>
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <div className="text-center space-y-8 max-w-4xl mx-auto px-4">
             {/* greeting message */}
             <div className="space-y-4">
                 <h1 className="text-5xl md:text-7xl font-bold text-sample-800 mb-4">
@@ -64,6 +66,8 @@ function HomePage() {
                 </div>
             </div>
         </div>
+            </div>
+        </PageTransition>
     )
 }
 

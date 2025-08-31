@@ -1,7 +1,10 @@
 import { useState } from "react"
-import Input from './ui/Input'
-import Button from './ui/Button'
-import WeatherAppSkeleton from "./WeatherAppSkeleton"
+import Input from '../components/ui/Input'
+import Button from '../components/ui/Button'
+import WeatherAppSkeleton from "../components/WeatherAppSkeleton"
+import PageTransition from "../components/PageTransition"
+
+document.title = 'App | Weather';
 
 interface WeatherData {
     main?: {
@@ -45,7 +48,8 @@ function WeatherApp() {
     }
 
     return (
-        <div className="max-w-md mx-auto mt-8 px-4">
+        <PageTransition>
+            <div className="max-w-md mx-auto mt-8 px-4">
             <div className="bg-gradient-to-br from-sample-500 to-sample-700 rounded-2xl shadow-2xl p-8 text-white relative">
                 <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full"></div>
                 <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-white/10 rounded-full"></div>
@@ -128,6 +132,7 @@ function WeatherApp() {
                 )}
             </div>
         </div>
+        </PageTransition>
     );
 }
 
