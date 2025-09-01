@@ -19,7 +19,7 @@ function Input (props: InputProps) {
 
     return (
         <div className="w-full">
-            <label htmlFor={id} className="block font-medium text-700 mb-1">{label}</label>
+            <label htmlFor={id} className="block font-medium text-700 text-center mb-1">{label}</label>
             <input 
                 id={id}
                 value={value}

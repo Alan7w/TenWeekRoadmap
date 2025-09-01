@@ -122,7 +122,7 @@ function BlogPage() {
                         >
                             <Card
                                 variant="outlined"
-                                className="h-full hover:shadow-2xl transition-shadow duration-300 cursor-pointer"
+                                className="h-full hover:shadow-2xl transition-shadow duration-300"
                             >
                                 <div className="h-full flex flex-col">
                                     {/* post number */}

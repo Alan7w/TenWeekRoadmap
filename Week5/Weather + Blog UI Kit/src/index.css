@@ -13,3 +13,39 @@
   --color-sample-900: #052c2e;
   --color-sample-950: #021617;
 }
+
+* {
+  /* Enable hardware acceleration for transforms */
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.page-transition * {
+  animation-duration: 0.3s !important;
+  transition-duration: 0.3s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition *,
+  .stagger-animation *,
+  .hover-animation * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+      scroll-behavior: auto !important;
+  }
+}
+
+/* Performance optimization for non-essential animations */
+.motion-reduce {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}

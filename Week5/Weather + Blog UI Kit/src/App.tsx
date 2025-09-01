@@ -7,6 +7,7 @@ import BlogPage from './pages/BlogPage'
 import NotFoundPage from './pages/NotFoundPage'
 import PostDetail from './pages/PostDetail'
 import WeatherApp from "./pages/WeatherApp"
+import ScrollToTop from "./components/ui/ScrollToTop"
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
             <Route path="/weather" element={<WeatherApp />} />
           </Routes>
         </AnimatePresence>
+
+        <ScrollToTop />
       </div>
     </div>
   )
