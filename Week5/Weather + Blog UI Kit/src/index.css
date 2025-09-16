@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
-@theme {
+:root {
+  /* Sample color palette - Light mode */
   --color-sample-50: #e8fbfd;
   --color-sample-100: #d1f8fa;
   --color-sample-200: #9eeff5;
@@ -14,6 +15,156 @@
   --color-sample-950: #021617;
 }
 
+/* Dark mode styles - Controlled approach */
+.dark {
+  background-color: #1a1a1a !important;
+  color: #f0f0f0 !important;
+}
+
+/* Specific dark mode overrides */
+.dark header {
+  background-color: rgba(26, 26, 26, 0.8) !important;
+  border-color: #404040 !important;
+}
+
+.dark .border-sample-200,
+.dark .border-sample-600 {
+  border-color: #404040 !important;
+}
+
+.dark .bg-white,
+.dark .bg-white\/80,
+.dark .bg-white\/90,
+.dark .bg-white\/95 {
+  background-color: rgba(40, 40, 40, 0.9) !important;
+}
+
+.dark .text-sample-800,
+.dark .text-sample-700,
+.dark .text-sample-600,
+.dark .text-sample-900 {
+  color: #f0f0f0 !important;
+}
+
+.dark .text-sample-100,
+.dark .text-sample-200 {
+  color: #a0a0a0 !important;
+}
+
+/* Dark mode gradients */
+.dark .bg-gradient-to-br {
+  background: linear-gradient(to bottom right, #1a1a1a, #2a2a2a) !important;
+}
+
+/* Button styles in dark mode */
+.dark .bg-sample-600 {
+  background-color: #17d2e1 !important;
+  color: #1a1a1a !important;
+}
+
+.dark .hover\:bg-sample-700:hover {
+  background-color: #12aab5 !important;
+}
+
+.dark .hover\:bg-sample-50:hover {
+  background-color: rgba(23, 210, 225, 0.1) !important;
+}
+
+.dark button.border-sample-600,
+.dark .border-sample-600 {
+  border-color: #17d2e1 !important;
+}
+
+.dark button.text-sample-600,
+.dark .text-sample-600 {
+  color: #17d2e1 !important;
+}
+
+.dark button.text-sample-700,
+.dark .text-sample-700 {
+  color: #17d2e1 !important;
+}
+
+/* Ensure proper contrast in light mode */
+.text-sample-800 {
+  color: #095358 !important;
+}
+
+.text-sample-700 {
+  color: #0e7e86 !important;
+}
+
+.text-sample-600 {
+  color: #12aab5 !important;
+}
+
+/* Button text and border visibility in light mode */
+.border-sample-600 {
+  border-color: #12aab5 !important;
+}
+
+.border-sample-200 {
+  border-color: #9eeff5 !important;
+}
+
+/* Fix button text colors specifically */
+button.text-sample-700,
+.text-sample-700 {
+  color: #0e7e86 !important;
+}
+
+button.text-sample-600,
+.text-sample-600 {
+  color: #12aab5 !important;
+}
+
+/* Ensure buttons have proper contrast */
+.bg-sample-600 {
+  background-color: #12aab5 !important;
+  color: white !important;
+}
+
+.hover\:bg-sample-700:hover {
+  background-color: #0e7e86 !important;
+}
+
+/* Button border colors - stronger contrast */
+button.border-sample-600,
+.border-sample-600 {
+  border-color: #12aab5 !important;
+}
+
+/* Outlined button text should be darker for better visibility */
+button.border-2.text-sample-600,
+.border-2.text-sample-600 {
+  color: #0e7e86 !important;
+  border-color: #0e7e86 !important;
+}
+
+/* Hover states for better contrast */
+.hover\:bg-sample-50:hover {
+  background-color: rgba(14, 126, 134, 0.1) !important;
+}
+
+/* Weather App specific text fixes */
+.text-sample-100 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Weather app background gradients - ensure proper contrast */
+.from-sample-500.to-sample-700 {
+  background: linear-gradient(to bottom right, #17d2e1, #0e7e86) !important;
+}
+
+/* Weather app text in dark mode */
+.dark .text-sample-100 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark .from-sample-500.to-sample-700 {
+  background: linear-gradient(to bottom right, #12aab5, #095358) !important;
+}
+
 * {
   /* Enable hardware acceleration for transforms */
   backface-visibility: hidden;
@@ -22,7 +173,15 @@
 
 html {
   scroll-behavior: smooth;
+  transition: filter 0.3s ease;
 }
+
+/* Add smooth transitions for dark mode */
+body {
+  transition: filter 0.3s ease;
+}
+
+
 
 .page-transition * {
   animation-duration: 0.3s !important;
@@ -48,4 +207,23 @@ html {
   animation-duration: 0.01ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.01ms !important;
+}
+
+/* Weather App specific text fixes */
+.text-sample-100 {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Weather app background gradients - ensure proper contrast */
+.from-sample-500.to-sample-700 {
+  background: linear-gradient(to bottom right, #17d2e1, #0e7e86) !important;
+}
+
+/* Weather app text in dark mode */
+.dark .text-sample-100 {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.dark .from-sample-500.to-sample-700 {
+  background: linear-gradient(to bottom right, #12aab5, #095358) !important;
 }

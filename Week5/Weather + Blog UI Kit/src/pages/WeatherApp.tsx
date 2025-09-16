@@ -60,7 +60,7 @@ function WeatherApp() {
                     <ScrollReveal direction="down" delay={0.3}>
                         <div className="relative z-10 text-center mb-8">
                             <h1 className="text-3xl font-bold mb-2">Weather App</h1>
-                            <p className="text-sample-100 text-sm">
+                            <p className="text-white/90 text-sm">
                                 Welcome to the Weather App! <br />
                                 Stay tuned for weather updates.
                             </p>
@@ -131,17 +131,17 @@ function WeatherApp() {
                                     <div className="text-3xl font-bold">
                                         {Math.round(weatherData.main.temp)}°C
                                     </div>
-                                    <div className="text-sample-100 text-sm">Temperature</div>
+                                    <div className="text-white/80 text-sm">Temperature</div>
                                 </div>
                                 
                                 <div className="flex justify-between items-center bg-white/10 rounded-lg p-3">
-                                    <span className="text-sample-100">Humidity:</span>
-                                    <span className="font-semibold">{weatherData.main.humidity}%</span>
+                                    <span className="text-white/80">Humidity:</span>
+                                    <span className="font-semibold text-white">{weatherData.main.humidity}%</span>
                                 </div>
                                 
                                 <div className="flex justify-between items-center bg-white/10 rounded-lg p-3">
-                                    <span className="text-sample-100">Description:</span>
-                                    <span className="font-semibold capitalize">
+                                    <span className="text-white/80">Description:</span>
+                                    <span className="font-semibold capitalize text-white">
                                         {weatherData.weather && weatherData.weather[0] ? 
                                             weatherData.weather[0].description : 
                                             "No description available"
