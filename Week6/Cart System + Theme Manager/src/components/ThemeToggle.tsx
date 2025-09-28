@@ -1,19 +1,19 @@
-import { useTheme } from '../../contexts/useTheme';
+import { useTheme } from '../contexts/useTheme';
 import { motion } from 'framer-motion';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const isDarkMode = theme === 'dark';
   
   return (
     <motion.button
       onClick={toggleTheme}
-      className="relative p-2 rounded-full bg-transparent text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+      className="relative p-2 rounded-full bg-transparent text-purple-600 hover:bg-purple-100 dark:text-purple-400 dark:hover:bg-purple-900/20 transition-colors cursor-pointer"
       whileTap={{ scale: 0.9 }}
-      aria-label={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-      title={theme == 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
     >
-      {theme == 'dark' ? (
-        // Sun icon for dark mode
+      {isDarkMode ? (
         <motion.svg 
           xmlns="http://www.w3.org/2000/svg" 
           width="20" 
@@ -39,7 +39,6 @@ export default function ThemeToggle() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
         </motion.svg>
       ) : (
-        // Moon icon for light mode
         <motion.svg 
           xmlns="http://www.w3.org/2000/svg" 
           width="20" 

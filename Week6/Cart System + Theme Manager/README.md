@@ -1,13 +1,73 @@
-# React + TypeScript + Vite
+# MiniStore - Cart System + Theme Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive marketplace built with React, TypeScript, and Tailwind CSS, demonstrating advanced Context API patterns and modern web development practices.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ✅ **Completed (Day 1)**
+- **Theme Management**: Complete light/dark mode with system preference detection
+- **Mobile-Responsive Design**: Hamburger menu for mobile navigation
+- **Context API Integration**: Multiple contexts working together seamlessly
+- **Beautiful UI**: Purple gradient branding across all pages
+- **Cart System Foundation**: Context-based cart state management
+- **Search Functionality**: Global search state management
 
-## Expanding the ESLint configuration
+## 🏗️ **Architecture & Context API Usage**
+
+This project demonstrates proper React Context API usage with multiple contexts:
+
+### 1. **ThemeContext** (`src/contexts/ThemeContext.tsx`)
+Manages application theme state with localStorage persistence.
+
+```tsx
+const { theme, toggleTheme } = useTheme();
+```
+
+**Features:**
+- Automatic system preference detection
+- localStorage persistence  
+- Document class application for CSS theming
+- Type-safe with TypeScript
+
+### 2. **UIContext** (`src/contexts/UIContext.tsx`)
+Manages global UI state like mobile menu and search.
+
+```tsx
+const { 
+  isMobileMenuOpen, 
+  toggleMobileMenu, 
+  closeMobileMenu,
+  searchQuery, 
+  setSearchQuery 
+} = useUI();
+```
+
+**Features:**
+- Mobile menu state management
+- Global search query state
+- Centralized UI interactions
+
+### 3. **CartContext** (`src/contexts/CartContext.tsx`)
+Manages shopping cart state with localStorage persistence.
+
+```tsx
+const { 
+  items, 
+  addItem, 
+  removeItem, 
+  getTotalItems, 
+  getTotalPrice 
+} = useCart();
+```
+
+**Features:**
+- Add/remove items from cart
+- Quantity management
+- Total calculations
+- localStorage persistence
+- Type-safe cart operations
+
+## 🎨 **Design System & Context Integration**
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 

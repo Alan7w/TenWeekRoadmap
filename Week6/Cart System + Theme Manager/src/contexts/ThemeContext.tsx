@@ -6,50 +6,40 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  // Check if user previously selected a theme or use system preference
-  const [theme, setTheme] = useState<Theme>(() => {
+  const [currentTheme, setCurrentTheme] = useState<Theme>(() => {
     const savedTheme = localStorage.getItem('theme') as Theme;
+    if (savedTheme) return savedTheme;
     
-    if (savedTheme) {
-      return savedTheme;
-    }
-    
-    // Check system preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }
-    
     return 'light';
   });
 
-  // Apply theme to document when it changes
   useEffect(() => {
     document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    document.documentElement.classList.add(currentTheme);
+    localStorage.setItem('theme', currentTheme);
+  }, [currentTheme]);
 
-  // Listen for system preference changes
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const handleChange = () => {
+    const handleSystemThemeChange = () => {
       if (!localStorage.getItem('theme')) {
-        setTheme(mediaQuery.matches ? 'dark' : 'light');
+        setCurrentTheme(mediaQuery.matches ? 'dark' : 'light');
       }
     };
     
-    mediaQuery.addEventListener('change', handleChange);
-    
-    return () => mediaQuery.removeEventListener('change', handleChange);
+    mediaQuery.addEventListener('change', handleSystemThemeChange);
+    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
   }, []);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    setCurrentTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme: currentTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );
