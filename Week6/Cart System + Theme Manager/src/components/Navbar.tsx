@@ -1,11 +1,15 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useUI } from '../contexts/useUI';
 import { useCart } from '../contexts/useCart';
+import { useAuth } from '../contexts/useAuth';
 import ThemeToggle from './ThemeToggle';
 
 export default function Navbar() {
   const { searchQuery, setSearchQuery, isMobileMenuOpen, toggleMobileMenu, closeMobileMenu } = useUI();
   const { getTotalItems } = useCart();
+  const { isLoggedIn, currentUser, logout } = useAuth();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full border-b border-neutral-200/60 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/90 dark:border-neutral-800 dark:bg-neutral-950/95 dark:supports-[backdrop-filter]:bg-neutral-950/90 shadow-sm">
@@ -111,8 +115,63 @@ export default function Navbar() {
             About
           </NavLink>
 
-          {/* Theme Toggle */}
-          <div className="ml-2 pl-2 border-l border-neutral-200 dark:border-neutral-700">
+          {/* Authentication & Theme Toggle */}
+          <div className="ml-2 pl-2 border-l border-neutral-200 dark:border-neutral-700 flex items-center gap-2">
+            {isLoggedIn ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">
+                      {currentUser?.firstName.charAt(0).toUpperCase()}{currentUser?.lastName.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="hidden sm:block">{currentUser?.firstName}</span>
+                  <svg className={`w-4 h-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                
+                {/* User dropdown menu */}
+                {showUserMenu && (
+                  <div className="absolute right-0 mt-2 w-48 py-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200 dark:border-neutral-700 z-[60]">
+                    <div className="px-4 py-2 border-b border-neutral-200 dark:border-neutral-700">
+                      <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                        {currentUser?.firstName} {currentUser?.lastName}
+                      </p>
+                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                        @{currentUser?.username}
+                      </p>
+                    </div>
+                    <NavLink
+                      to="/profile"
+                      onClick={() => setShowUserMenu(false)}
+                      className="block w-full text-left px-4 py-2 text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors"
+                    >
+                      View Profile
+                    </NavLink>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <NavLink
+                to="/signin"
+                className="px-4 py-2 rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              >
+                Sign In
+              </NavLink>
+            )}
             <ThemeToggle />
           </div>
         </div>
@@ -122,7 +181,7 @@ export default function Navbar() {
           <ThemeToggle />
           <button
             onClick={toggleMobileMenu}
-            className="p-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            className="p-2 rounded-lg text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
             aria-label="Toggle mobile menu"
           >
             <svg
@@ -222,11 +281,75 @@ export default function Navbar() {
               </svg>
               About
             </NavLink>
+
+            {/* Mobile Authentication */}
+            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-700 mt-4">
+              {isLoggedIn ? (
+                <div className="space-y-2">
+                  <div className="px-4 py-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-white text-sm font-bold">
+                          {currentUser?.firstName.charAt(0).toUpperCase()}{currentUser?.lastName.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                          {currentUser?.firstName} {currentUser?.lastName}
+                        </p>
+                        <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                          @{currentUser?.username}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <NavLink
+                    to="/profile"
+                    onClick={closeMobileMenu}
+                    className="w-full flex items-center px-4 py-3 rounded-xl font-medium text-base text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all"
+                  >
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                    View Profile
+                  </NavLink>
+                  <button
+                    onClick={() => {
+                      logout();
+                      closeMobileMenu();
+                    }}
+                    className="w-full flex items-center px-4 py-3 rounded-xl font-medium text-base text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all cursor-pointer"
+                  >
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    </svg>
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <NavLink
+                  to="/signin"
+                  onClick={closeMobileMenu}
+                  className="w-full flex items-center justify-center px-4 py-3 rounded-xl font-medium text-base text-white bg-blue-600 hover:bg-blue-700 transition-all"
+                >
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Sign In
+                </NavLink>
+              )}
+            </div>
           </nav>
         </div>
       )}
 
-
+      {/* Click outside to close user menu */}
+      {showUserMenu && (
+        <div 
+          className="fixed inset-0 z-[50]" 
+          onClick={() => setShowUserMenu(false)}
+        />
+      )}
     </header>
   );
 }

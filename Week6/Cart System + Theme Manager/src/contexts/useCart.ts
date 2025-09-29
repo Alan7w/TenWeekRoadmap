@@ -1,7 +1,6 @@
 import { useContext } from 'react';
 import { CartContext, type CartContextType } from './CartContextTypes';
 
-// Custom hook to use the cart context
 export function useCart(): CartContextType {
   const context = useContext(CartContext);
   

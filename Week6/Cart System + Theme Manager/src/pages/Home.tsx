@@ -1,6 +1,9 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../contexts/useAuth';
 
 export default function Home() {
+  const { isLoggedIn, currentUser } = useAuth();
+  
   const featuredCategories = [
     {
       name: 'Electronics',
@@ -36,10 +39,13 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl px-4 py-24 md:py-32">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">
-              Welcome to MiniStore
+              {isLoggedIn ? `Welcome back, ${currentUser?.firstName}!` : 'Welcome to MiniStore'}
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-2xl mx-auto">
-              Discover amazing products, manage your cart effortlessly, and enjoy a seamless shopping experience
+              {isLoggedIn 
+                ? 'Ready to continue shopping? Your cart and preferences are saved and ready to go!' 
+                : 'Discover amazing products, manage your cart effortlessly, and enjoy a seamless shopping experience'
+              }
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <NavLink
@@ -162,6 +168,74 @@ export default function Home() {
           </NavLink>
         </div>
       </section>
+
+      {/* Demo Credentials Section (only show when not logged in) */}
+      {!isLoggedIn && (
+        <section className="py-12 bg-neutral-50 dark:bg-neutral-900 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="mx-auto max-w-4xl px-4">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+                Try Demo Authentication
+              </h3>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Test the authentication system with these demo credentials
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-md border border-neutral-200 dark:border-neutral-700">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-white text-sm font-bold">DU</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-neutral-900 dark:text-neutral-100">Demo User</h4>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Light theme preference</p>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">Username:</span>
+                    <span className="ml-2 font-mono bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded">demo</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">Password:</span>
+                    <span className="ml-2 font-mono bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded">demo123</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white dark:bg-neutral-800 p-6 rounded-lg shadow-md border border-neutral-200 dark:border-neutral-700">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                    <span className="text-white text-sm font-bold">JS</span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-neutral-900 dark:text-neutral-100">Jane Smith</h4>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400">Dark theme preference</p>
+                  </div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">Username:</span>
+                    <span className="ml-2 font-mono bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded">jane</span>
+                  </div>
+                  <div>
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">Password:</span>
+                    <span className="ml-2 font-mono bg-neutral-100 dark:bg-neutral-700 px-2 py-1 rounded">jane123</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="text-center mt-8">
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                📝 <strong>Features to test:</strong> Login/logout, theme preferences, cart persistence, user-specific data
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
