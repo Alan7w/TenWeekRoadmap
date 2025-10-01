@@ -9,11 +9,11 @@ import About from './pages/About'
 import SignIn from './pages/SignIn'
 import UserProfile from './pages/UserProfile'
 import NotFound from './pages/NotFound'
+import { CartProvider } from './contexts/CartContext'
 
 function App() {
-  
   return (
-    <>
+    <CartProvider>
       <UserPreferenceSync />
       <Navbar />
       <main className="pt-20 min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 transition-colors duration-200">
@@ -28,7 +28,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-    </>
+    </CartProvider>
   )
 }
 

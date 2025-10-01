@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import { CartContext, type CartContextType } from './CartContextTypes';
+import { CartContext } from './CartContextInstance';
+import type { CartContextType } from './CartContextTypes';
 
 export function useCart(): CartContextType {
   const context = useContext(CartContext);

@@ -1,4 +1,9 @@
+import { products } from '../data/products';
+import { useCart } from '../contexts/useCart';
+
 export default function Products() {
+  const { items, addItem, removeItem } = useCart();
+
   return (
     <div className="min-h-full">
       {/* Hero Section with Purple Gradient */}
@@ -10,7 +15,7 @@ export default function Products() {
               Products
             </h1>
             <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-              Our complete product catalog will be available here soon. Come back on Day 5-7 for the full shopping experience!
+              Browse our collection of high-quality products
             </p>
           </div>
         </div>
@@ -20,24 +25,36 @@ export default function Products() {
       <section className="py-12 bg-neutral-50 dark:bg-neutral-900">
         <div className="mx-auto max-w-6xl px-4">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Placeholder cards */}
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="bg-white dark:bg-neutral-950 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all animate-pulse">
-                <div className="w-full h-48 bg-gradient-to-br from-neutral-200 to-neutral-300 dark:from-neutral-800 dark:to-neutral-700 rounded-lg mb-4"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded mb-2"></div>
-                <div className="h-4 bg-neutral-200 dark:bg-neutral-800 rounded w-2/3 mb-3"></div>
-                <div className="h-6 bg-gradient-to-r from-blue-200 to-purple-200 dark:from-blue-800 dark:to-purple-800 rounded"></div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-6">
-              Exciting products are coming soon! Stay tuned for our amazing collection.
-            </p>
-            <button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3 rounded-lg font-semibold transition-all transform hover:scale-105 shadow-lg">
-              Get Notified
-            </button>
+            {products.map((product) => {
+              const isInCart = items.some(item => item.id === product.id);
+              
+              return (
+                <div key={product.id} className="bg-white dark:bg-neutral-950 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all">
+                  <div className="w-full h-48 mb-4 relative overflow-hidden rounded-lg">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <h3 className="font-semibold text-lg mb-2 text-neutral-900 dark:text-white">{product.name}</h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-3">{product.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-lg font-bold text-neutral-900 dark:text-white">
+                      ${product.price.toFixed(2)}
+                    </span>
+                    <button
+                      onClick={() => isInCart ? removeItem(product.id) : addItem(product)}
+                      className={`px-4 py-2 rounded-lg font-medium cursor-pointer ${isInCart 
+                        ? 'bg-red-500 hover:bg-red-600 text-white' 
+                        : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                    >
+                      {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

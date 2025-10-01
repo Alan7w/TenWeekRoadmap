@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/useAuth';
-import { useNavigate, Link, useSearchParams } from 'react-router-dom';
+import { useCart } from '../contexts/useCart';
+import { useNavigate, Link, useSearchParams, useLocation } from 'react-router-dom';
 
 export default function SignIn() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,7 +20,12 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
 
   const { login, register, isLoggedIn } = useAuth();
+  const { addItem } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
+  
+  const returnTo = location.state?.returnTo || '/';
+  const pendingItem = location.state?.pendingItem;
 
   const passwordRequirements = [
     { text: 'At least 6 characters', met: formData.password.length >= 6 },
@@ -30,9 +36,12 @@ export default function SignIn() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/profile', { replace: true });
+      if (pendingItem) {
+        addItem(pendingItem);
+      }
+      navigate(returnTo, { replace: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, pendingItem, addItem, returnTo]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -84,7 +93,7 @@ export default function SignIn() {
       }
 
       setLoading(false);
-      navigate('/profile', { replace: true });
+      // Navigation will be handled by useEffect after login status updates
     } catch {
       setError('An unexpected error occurred');
       setLoading(false);
