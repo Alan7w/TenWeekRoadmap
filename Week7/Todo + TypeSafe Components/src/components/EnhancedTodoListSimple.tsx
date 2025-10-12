@@ -1,14 +1,20 @@
+// Enhanced Todo List Component
 import React, { useState, useMemo, useCallback } from 'react';
 import type {
   TodoItem,
   TodoStatus,
   TodoPriority,
   TodoCategory,
-  LoadingState
+  LoadingState,
+  SelectOption
+} from '../types';
+import { 
+  todoStatusOptions
 } from '../types';
 import EnhancedTodoItem from './EnhancedTodoItem';
+import { SimpleSelect } from './Select';
 
-// Simple filter interface
+// Interface Definitions
 interface SimpleFilter {
   status?: TodoStatus | '';
   priority?: TodoPriority | '';
@@ -16,7 +22,7 @@ interface SimpleFilter {
   search: string;
 }
 
-// Props interface
+
 interface EnhancedTodoListProps {
   initialTodos?: TodoItem[];
   onTodoChange?: (todos: TodoItem[]) => void;
@@ -24,24 +30,60 @@ interface EnhancedTodoListProps {
   showStats?: boolean;
 }
 
+// Select Options
+const priorityOptions: SelectOption<TodoPriority>[] = [
+  { value: 'low', label: 'Low' },
+  { value: 'medium', label: 'Medium' },
+  { value: 'high', label: 'High' },
+  { value: 'critical', label: 'Critical' }
+];
+
+const categoryOptions: SelectOption<TodoCategory>[] = [
+  { value: 'work', label: 'Work' },
+  { value: 'personal', label: 'Personal' },
+  { value: 'shopping', label: 'Shopping' },
+  { value: 'health', label: 'Health' },
+  { value: 'other', label: 'Other' }
+];
+
+
+const statusOptions: SelectOption<TodoStatus>[] = todoStatusOptions;
+
+
+const priorityFilterOptions: SelectOption<TodoPriority | ''>[] = [
+  { value: '', label: 'All Priorities' },
+  ...priorityOptions
+];
+
+const categoryFilterOptions: SelectOption<TodoCategory | ''>[] = [
+  { value: '', label: 'All Categories' },
+  ...categoryOptions
+];
+
+const statusFilterOptions: SelectOption<TodoStatus | ''>[] = [
+  { value: '', label: 'All Statuses' },
+  ...statusOptions
+];
+
+// Main Component
 const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
   initialTodos = [],
   onTodoChange,
   maxTodos = 100,
   showStats = true
 }) => {
-  // State management
+
   const [todos, setTodos] = useState<TodoItem[]>(initialTodos);
   const [loading, setLoading] = useState<LoadingState>({ isLoading: false });
 
-  // Form state for new todos (simplified)
+
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [newTodoDescription, setNewTodoDescription] = useState('');
   const [newTodoPriority, setNewTodoPriority] = useState<TodoPriority>('medium');
   const [newTodoCategory, setNewTodoCategory] = useState<TodoCategory>('other');
   const [newTodoDueDate, setNewTodoDueDate] = useState('');
 
-  // Filter state
+
   const [filters, setFilters] = useState<SimpleFilter>({
     status: '',
     priority: '',
@@ -49,15 +91,15 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
     search: ''
   });
 
-  // Form validation
+
   const [formError, setFormError] = useState('');
 
-  // Notify parent of changes
+
   React.useEffect(() => {
     onTodoChange?.(todos);
   }, [todos, onTodoChange]);
 
-  // Filtered todos
+
   const filteredTodos = useMemo(() => {
     return todos.filter(todo => {
       if (filters.status && todo.status !== filters.status) return false;
@@ -72,20 +114,21 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
     });
   }, [todos, filters]);
 
-  // Statistics
+
   const stats = useMemo(() => {
     const total = todos.length;
     const completed = todos.filter(todo => todo.status === 'completed').length;
-    const pending = todos.filter(todo => todo.status === 'pending').length;
-    const inProgress = todos.filter(todo => todo.status === 'in_progress').length;
+    const notStarted = todos.filter(todo => todo.status === 'not-started').length;
+    const inProgress = todos.filter(todo => todo.status === 'in-progress').length;
+    const blocked = todos.filter(todo => todo.status === 'blocked').length;
     const overdue = todos.filter(todo => 
       todo.dueDate && new Date(todo.dueDate) < new Date() && todo.status !== 'completed'
     ).length;
 
-    return { total, completed, pending, inProgress, overdue };
+    return { total, completed, notStarted, inProgress, blocked, overdue };
   }, [todos]);
 
-  // Add new todo
+
   const handleAddTodo = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -103,14 +146,14 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
     setFormError('');
 
     try {
-      // Simulate API call
+
       await new Promise(resolve => setTimeout(resolve, 300));
 
       const newTodo: TodoItem = {
         id: crypto.randomUUID(),
         title: newTodoTitle.trim(),
         description: newTodoDescription.trim(),
-        status: 'pending',
+        status: 'not-started',
         priority: newTodoPriority,
         category: newTodoCategory,
         tags: [],
@@ -121,7 +164,7 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
 
       setTodos(prev => [...prev, newTodo]);
 
-      // Reset form
+
       setNewTodoTitle('');
       setNewTodoDescription('');
       setNewTodoPriority('medium');
@@ -134,7 +177,7 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
     }
   }, [newTodoTitle, newTodoDescription, newTodoPriority, newTodoCategory, newTodoDueDate, todos.length, maxTodos]);
 
-  // Update todo
+
   const handleUpdateTodo = useCallback(async (
     todoId: string, 
     updates: Partial<Omit<TodoItem, 'id' | 'createdAt' | 'updatedAt'>>
@@ -173,9 +216,13 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
             <div className="text-2xl font-bold text-green-600">{stats.completed}</div>
             <div className="text-sm text-green-800">Completed</div>
           </div>
-          <div className="bg-yellow-50 p-3 rounded-lg text-center">
-            <div className="text-2xl font-bold text-yellow-600">{stats.pending}</div>
-            <div className="text-sm text-yellow-800">Pending</div>
+          <div className="bg-gray-50 p-3 rounded-lg text-center">
+            <div className="text-2xl font-bold text-gray-600">{stats.notStarted}</div>
+            <div className="text-sm text-gray-800">Not Started</div>
+          </div>
+          <div className="bg-red-50 p-3 rounded-lg text-center">
+            <div className="text-2xl font-bold text-red-600">{stats.blocked}</div>
+            <div className="text-sm text-red-800">Blocked</div>
           </div>
           <div className="bg-purple-50 p-3 rounded-lg text-center">
             <div className="text-2xl font-bold text-purple-600">{stats.inProgress}</div>
@@ -218,35 +265,26 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
             <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
               Priority
             </label>
-            <select
-              id="priority"
+            <SimpleSelect<TodoPriority>
+              options={priorityOptions}
               value={newTodoPriority}
-              onChange={(e) => setNewTodoPriority(e.target.value as TodoPriority)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
+              onValueChange={(value) => setNewTodoPriority(value || 'medium')}
+              placeholder="Select priority"
+              data-testid="priority-select"
+            />
           </div>
 
           <div>
             <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
               Category
             </label>
-            <select
-              id="category"
+            <SimpleSelect<TodoCategory>
+              options={categoryOptions}
               value={newTodoCategory}
-              onChange={(e) => setNewTodoCategory(e.target.value as TodoCategory)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-              <option value="shopping">Shopping</option>
-              <option value="health">Health</option>
-              <option value="other">Other</option>
-            </select>
+              onValueChange={(value) => setNewTodoCategory(value || 'other')}
+              placeholder="Select category"
+              data-testid="category-select"
+            />
           </div>
 
           <div>
@@ -321,54 +359,39 @@ const EnhancedTodoList: React.FC<EnhancedTodoListProps> = ({
             <label htmlFor="statusFilter" className="block text-sm font-medium text-gray-700 mb-1">
               Status
             </label>
-            <select
-              id="statusFilter"
-              value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value as TodoStatus | '' }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Statuses</option>
-              <option value="pending">Pending</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-            </select>
+            <SimpleSelect<TodoStatus | ''>
+              options={statusFilterOptions}
+              value={filters.status ?? ''}
+              onValueChange={(value) => setFilters(prev => ({ ...prev, status: value || '' }))}
+              placeholder="All Statuses"
+              data-testid="status-filter-select"
+            />
           </div>
 
           <div>
             <label htmlFor="priorityFilter" className="block text-sm font-medium text-gray-700 mb-1">
               Priority
             </label>
-            <select
-              id="priorityFilter"
-              value={filters.priority}
-              onChange={(e) => setFilters(prev => ({ ...prev, priority: e.target.value as TodoPriority | '' }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Priorities</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-              <option value="critical">Critical</option>
-            </select>
+            <SimpleSelect<TodoPriority | ''>
+              options={priorityFilterOptions}
+              value={filters.priority ?? ''}
+              onValueChange={(value) => setFilters(prev => ({ ...prev, priority: value || '' }))}
+              placeholder="All Priorities"
+              data-testid="priority-filter-select"
+            />
           </div>
 
           <div>
             <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700 mb-1">
               Category
             </label>
-            <select
-              id="categoryFilter"
-              value={filters.category}
-              onChange={(e) => setFilters(prev => ({ ...prev, category: e.target.value as TodoCategory | '' }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">All Categories</option>
-              <option value="work">Work</option>
-              <option value="personal">Personal</option>
-              <option value="shopping">Shopping</option>
-              <option value="health">Health</option>
-              <option value="other">Other</option>
-            </select>
+            <SimpleSelect<TodoCategory | ''>
+              options={categoryFilterOptions}
+              value={filters.category ?? ''}
+              onValueChange={(value) => setFilters(prev => ({ ...prev, category: value || '' }))}
+              placeholder="All Categories"
+              data-testid="category-filter-select"
+            />
           </div>
         </div>
 

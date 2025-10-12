@@ -1,5 +1,4 @@
-// Enhanced UserProfile component with TypeScript patterns and dark mode support
-
+// Enhanced User Profile Component
 import React, { useState, useCallback, useMemo } from 'react';
 import type {
   EnhancedUserProfileProps,
@@ -8,7 +7,13 @@ import type {
   ValidationResult,
   LoadingState
 } from '../types';
-import { isValidEmail, isValidUrl } from '../types';
+import { 
+  isValidEmail, 
+  isValidUrl,
+  ROLE_CONFIG,
+  USER_PERMISSIONS,
+  hasPermission
+} from '../types';
 
 interface UserFormData extends Record<string, unknown> {
   name: string;
@@ -23,6 +28,7 @@ interface PreferencesFormData extends Record<string, unknown> {
   timezone: string;
 }
 
+// Form Validation
 const validateUserForm = (data: UserFormData): ValidationResult => {
   const errors: Record<string, string> = {};
 
@@ -52,6 +58,7 @@ const validateUserForm = (data: UserFormData): ValidationResult => {
   };
 };
 
+// Form State Hook
 function useFormState<T extends Record<string, unknown>>(
   initialValues: T,
   validator: (data: T) => ValidationResult
@@ -67,7 +74,7 @@ function useFormState<T extends Record<string, unknown>>(
   ) => {
     setValues(prev => ({ ...prev, [field]: value }));
     
-    // Clear error when user starts typing
+
     if (errors[field as string]) {
       setErrors(prev => ({ ...prev, [field]: '' }));
     }
@@ -108,14 +115,10 @@ function useFormState<T extends Record<string, unknown>>(
   };
 }
 
-// ===============================================
-// ENHANCED USERPROFILE COMPONENT
-// ===============================================
-
+// Main Profile Component
 export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
   user,
   onUpdateUser,
-  onUpdateAvatar: _onUpdateAvatar, // eslint-disable-line @typescript-eslint/no-unused-vars
   onUpdatePreferences,
   readonly = false,
   showPreferences = true,
@@ -129,7 +132,7 @@ export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
   const [activeTab, setActiveTab] = useState<'profile' | 'preferences'>('profile');
   const [loadingState, setLoadingState] = useState<LoadingState>({ isLoading: false });
 
-  // Profile form state
+
   const profileForm = useFormState<UserFormData>(
     {
       name: user.name,
@@ -140,14 +143,14 @@ export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
     validateUserForm
   );
 
-  // Preferences form state
+
   const preferencesForm = useFormState<PreferencesFormData>(
     {
       notifications: user.preferences.notifications,
       language: user.preferences.language,
       timezone: user.preferences.timezone || ''
     },
-    () => ({ isValid: true, errors: {} }) // Simple validation for preferences
+    () => ({ isValid: true, errors: {} })
   );
 
 
@@ -184,7 +187,7 @@ export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
     }
   }, [profileForm, onUpdateUser]);
 
-  // Avatar updates are handled through the form submission
+
 
   const handlePreferencesUpdate = useCallback(async () => {
     setLoadingState({ isLoading: true });
@@ -293,9 +296,17 @@ export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
             <span className={`px-2 py-1 text-xs font-medium rounded-full ${statusBadgeColor}`}>
               {user.status.toUpperCase()}
             </span>
-            <span className="text-sm text-gray-500 capitalize">
-              {user.role}
-            </span>
+            <div className="flex items-center space-x-2">
+              <span 
+                className="px-3 py-1 text-xs font-semibold rounded-full text-white"
+                style={{ backgroundColor: ROLE_CONFIG[user.role].color }}
+              >
+                {ROLE_CONFIG[user.role].label}
+              </span>
+              {hasPermission(user.role, USER_PERMISSIONS.ADMIN) && (
+                <span className="text-xs text-amber-600 font-medium">👑 Admin</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -348,7 +359,7 @@ export const EnhancedUserProfile: React.FC<EnhancedUserProfileProps> = ({
                   className="w-20 h-20 rounded-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
-                    target.src = '/default-avatar.png';
+                    target.src = 'https://th.bing.com/th/id/OIP.NQi3uKSoL560CydnY65nNgHaHa?w=198&h=198&c=7&r=0&o=7&cb=12&dpr=2&pid=1.7&rm=3';
                   }}
                 />
                 {loadingState.isLoading && (

@@ -1,3 +1,4 @@
+// Main Application Component
 import { useState } from 'react';
 import EnhancedUserProfile from './components/EnhancedUserProfile';
 import EnhancedTodoListSimple from './components/EnhancedTodoListSimple';
@@ -5,10 +6,11 @@ import type { TodoItem, UserProfile, UserPreferences } from './types';
 import './App.css';
 
 function App() {
+  // App State Management
   const [activeTab, setActiveTab] = useState<'profile' | 'todos'>('profile');
   const [todos, setTodos] = useState<TodoItem[]>([]);
   
-  // User profile state
+  // User Profile Data
   const [user, setUser] = useState<UserProfile>({
     id: '1',
     name: 'John Doe',
@@ -25,15 +27,13 @@ function App() {
     updatedAt: new Date().toISOString()
   });
 
-  // User profile handlers
+  // Event Handlers
   const handleUpdateUser = async (updates: Partial<UserProfile>) => {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
     setUser(prev => ({ ...prev, ...updates }));
   };
 
   const handleUpdateAvatar = async (newAvatar: string) => {
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 500));
     setUser(prev => ({ ...prev, avatar: newAvatar }));
   };
@@ -43,6 +43,7 @@ function App() {
     setUser(prev => ({ ...prev, preferences: { ...prev.preferences, ...newPreferences } }));
   };
 
+  // Render
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -55,7 +56,7 @@ function App() {
           </p>
         </header>
 
-        {/* Tab Navigation */}
+
         <div className="flex justify-center mb-8">
           <div className="flex bg-white rounded-lg shadow-md p-1">
             <button
@@ -81,7 +82,7 @@ function App() {
           </div>
         </div>
 
-        {/* Tab Content */}
+
         <div className="max-w-6xl mx-auto">
           {activeTab === 'profile' && (
             <div>
@@ -104,6 +105,7 @@ function App() {
               />
             </div>
           )}
+
         </div>
       </div>
     </div>

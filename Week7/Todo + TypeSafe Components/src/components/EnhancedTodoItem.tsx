@@ -1,4 +1,4 @@
-// Enhanced TodoItem component with TypeScript patterns and dark mode support
+// Enhanced Todo Item Component
 import React, { useState, useCallback, useMemo } from 'react';
 import type {
   EnhancedTodoItemProps,
@@ -8,7 +8,9 @@ import type {
   UpdateTodoInput,
   LoadingState
 } from '../types';
+import { getAvailableTransitions } from '../types';
 
+// Utility Functions
 const getPriorityColor = (priority: TodoPriority): string => {
   switch (priority) {
     case 'critical': return 'text-red-600 bg-red-50 border-red-200';
@@ -20,25 +22,39 @@ const getPriorityColor = (priority: TodoPriority): string => {
 };
 
 const getStatusColor = (status: TodoStatus): string => {
+
   switch (status) {
     case 'completed': return 'text-green-600 bg-green-50';
-    case 'in_progress': return 'text-blue-600 bg-blue-50';
-    case 'cancelled': return 'text-red-600 bg-red-50';
-    case 'pending': return 'text-gray-600 bg-gray-50';
+    case 'in-progress': return 'text-blue-600 bg-blue-50';
+    case 'cancelled': return 'text-purple-600 bg-purple-50';
+    case 'not-started': return 'text-gray-600 bg-gray-50';
+    case 'blocked': return 'text-red-600 bg-red-50';
+    case 'archived': return 'text-gray-500 bg-gray-100';
     default: return 'text-gray-600 bg-gray-50';
   }
 };
 
 const getNextStatus = (currentStatus: TodoStatus): TodoStatus => {
+  const availableTransitions = getAvailableTransitions(currentStatus);
+  
+
+  if (availableTransitions.length > 0) {
+    return availableTransitions[0] as TodoStatus;
+  }
+  
+
   switch (currentStatus) {
-    case 'pending': return 'in_progress';
-    case 'in_progress': return 'completed';
-    case 'completed': return 'pending';
-    case 'cancelled': return 'pending';
-    default: return 'pending';
+    case 'not-started': return 'in-progress';
+    case 'in-progress': return 'completed';
+    case 'completed': return 'archived';
+    case 'blocked': return 'in-progress';
+    case 'cancelled': return 'not-started';
+    case 'archived': return 'not-started';
+    default: return 'not-started';
   }
 };
 
+// Main Component
 export const EnhancedTodoItem: React.FC<EnhancedTodoItemProps> = ({
   todo,
   onUpdate,
@@ -56,7 +72,7 @@ export const EnhancedTodoItem: React.FC<EnhancedTodoItemProps> = ({
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [loadingState, setLoadingState] = useState<LoadingState>({ isLoading: false });
   
-  // Edit form state
+
   const [editForm, setEditForm] = useState({
     title: todo.title,
     description: todo.description || '',
@@ -64,7 +80,6 @@ export const EnhancedTodoItem: React.FC<EnhancedTodoItemProps> = ({
     category: todo.category,
     dueDate: todo.dueDate || ''
   });
-
 
 
   const handleToggleStatus = useCallback(async () => {
