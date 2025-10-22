@@ -1,0 +1,4 @@
+export { default as Home } from './Home';
+export { default as Movies } from './Movies';
+export { default as Booking } from './Booking';
+export { default as Cart } from './Cart';
