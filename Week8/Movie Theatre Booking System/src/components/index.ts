@@ -2,4 +2,4 @@
 export * from './ui'
 
 // Export layout components
-export * from './layout'
+export * from './Layout'

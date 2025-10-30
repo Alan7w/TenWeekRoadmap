@@ -9,7 +9,7 @@ export const TMDB_API = {
     NOW_PLAYING: '/movie/now_playing',
     UPCOMING: '/movie/upcoming',
     SEARCH_MOVIES: '/search/movie',
-    MOVIE_DETAILS: '/movie',
+    MOVIE_DETAILS: '/movie/{id}',
     MOVIE_VIDEOS: '/movie/{id}/videos',
     MOVIE_CREDITS: '/movie/{id}/credits',
     GENRES: '/genre/movie/list',
@@ -72,17 +72,7 @@ export const BOOKING_CONFIG = {
   PAYMENT_TIMEOUT: 5 * 60 * 1000, // 5 minutes in milliseconds
 } as const
 
-// UI Constants
-export const UI_CONFIG = {
-  DEBOUNCE_DELAY: 300,
-  PAGINATION_SIZE: 20,
-  MOBILE_BREAKPOINT: 768,
-  TABLET_BREAKPOINT: 1024,
-  MAX_POSTER_WIDTH: 500,
-  DEFAULT_POSTER_WIDTH: 342,
-} as const
-
-// Local Storage Keys
+// Local Storage Keys - actively used by booking service
 export const STORAGE_KEYS = {
   BOOKING_STATE: 'movie_booking_state',
   USER_PREFERENCES: 'user_preferences',
@@ -91,21 +81,30 @@ export const STORAGE_KEYS = {
   APP_THEME: 'app_theme',
 } as const
 
-// Error Messages
-export const ERROR_MESSAGES = {
-  NETWORK_ERROR: 'Network error. Please check your connection.',
-  API_ERROR: 'Unable to fetch data. Please try again later.',
-  NO_RESULTS: 'No results found for your search.',
-  BOOKING_ERROR: 'Unable to complete booking. Please try again.',
-  VALIDATION_ERROR: 'Please check the form for errors.',
-  SEAT_UNAVAILABLE: 'Selected seat is no longer available.',
-  MAX_SEATS_EXCEEDED: `You can select maximum ${BOOKING_CONFIG.MAX_SEATS_PER_BOOKING} seats.`,
-  SESSION_EXPIRED: 'Your session has expired. Please start again.',
-} as const
+// Future expansion constants - currently unused but prepared for feature development
+// export const UI_CONFIG = {
+//   DEBOUNCE_DELAY: 300,
+//   PAGINATION_SIZE: 20,
+//   MOBILE_BREAKPOINT: 768,
+//   TABLET_BREAKPOINT: 1024,
+//   MAX_POSTER_WIDTH: 500,
+//   DEFAULT_POSTER_WIDTH: 342,
+// } as const
 
-// Success Messages
-export const SUCCESS_MESSAGES = {
-  BOOKING_CONFIRMED: 'Booking confirmed successfully!',
-  PAYMENT_PROCESSED: 'Payment processed successfully.',
-  SEATS_SELECTED: 'Seats selected successfully.',
-} as const
+// export const ERROR_MESSAGES = {
+//   NETWORK_ERROR: 'Network error. Please check your connection.',
+//   API_ERROR: 'Unable to fetch data. Please try again later.',
+//   NO_RESULTS: 'No results found for your search.',
+//   BOOKING_ERROR: 'Unable to complete booking. Please try again.',
+//   VALIDATION_ERROR: 'Please check the form for errors.',
+//   SEAT_UNAVAILABLE: 'Selected seat is no longer available.',
+//   MAX_SEATS_EXCEEDED: `You can select maximum ${BOOKING_CONFIG.MAX_SEATS_PER_BOOKING} seats.`,
+//   SESSION_EXPIRED: 'Your session has expired. Please start again.',
+// } as const
+
+// Future expansion constants
+// export const SUCCESS_MESSAGES = {
+//   BOOKING_CONFIRMED: 'Booking confirmed successfully!',
+//   PAYMENT_PROCESSED: 'Payment processed successfully.',
+//   SEATS_SELECTED: 'Seats selected successfully.',
+// } as const

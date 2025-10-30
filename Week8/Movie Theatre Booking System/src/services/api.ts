@@ -10,8 +10,9 @@ const createApiClient = (): AxiosInstance => {
   const client = axios.create({
     baseURL: TMDB_API.BASE_URL,
     timeout: 10000,
-    params: {
-      api_key: TMDB_API.API_KEY,
+    headers: {
+      'Authorization': `Bearer ${TMDB_API.API_KEY}`,
+      'Content-Type': 'application/json',
     },
   })
 

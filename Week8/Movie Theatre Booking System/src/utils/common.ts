@@ -1,49 +1,40 @@
 /**
- * Debounce function to limit the rate of function execution
- */
-export const debounce = <T extends (...args: unknown[]) => unknown>(
-  func: T,
-  delay: number
-): ((...args: Parameters<T>) => void) => {
-  let timeoutId: number
-
-  return (...args: Parameters<T>) => {
-    clearTimeout(timeoutId)
-    timeoutId = window.setTimeout(() => func(...args), delay)
-  }
-}
-
-/**
- * Throttle function to limit the rate of function execution
- */
-export const throttle = <T extends (...args: unknown[]) => unknown>(
-  func: T,
-  delay: number
-): ((...args: Parameters<T>) => void) => {
-  let lastCall = 0
-
-  return (...args: Parameters<T>) => {
-    const now = Date.now()
-    if (now - lastCall >= delay) {
-      lastCall = now
-      func(...args)
-    }
-  }
-}
-
-/**
  * Generate unique ID
  */
 export const generateId = (): string => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36)
 }
 
-/**
- * Sleep utility for delays
- */
-export const sleep = (ms: number): Promise<void> => {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
+// Future utility functions - currently unused but prepared for feature development
+// Uncomment when implementing search/filtering or performance optimization features
+// export const debounce = <T extends (...args: unknown[]) => unknown>(
+//   func: T,
+//   delay: number
+// ): ((...args: Parameters<T>) => void) => {
+//   let timeoutId: number
+//   return (...args: Parameters<T>) => {
+//     clearTimeout(timeoutId)
+//     timeoutId = window.setTimeout(() => func(...args), delay)
+//   }
+// }
+
+// export const throttle = <T extends (...args: unknown[]) => unknown>(
+//   func: T,
+//   delay: number
+// ): ((...args: Parameters<T>) => void) => {
+//   let lastCall = 0
+//   return (...args: Parameters<T>) => {
+//     const now = Date.now()
+//     if (now - lastCall >= delay) {
+//       lastCall = now
+//       func(...args)
+//     }
+//   }
+// }
+
+// export const sleep = (ms: number): Promise<void> => {
+//   return new Promise(resolve => setTimeout(resolve, ms))
+// }
 
 /**
  * Check if device is mobile
