@@ -8,7 +8,6 @@ const Navbar: React.FC = () => {
     { path: '/', label: 'Home', icon: '🏠' },
     { path: '/movies', label: 'Movies', icon: '🎬' },
     { path: '/booking', label: 'Booking', icon: '🎫' },
-    { path: '/cart', label: 'Cart', icon: '🛒' },
   ];
 
   const isActive = (path: string) => {

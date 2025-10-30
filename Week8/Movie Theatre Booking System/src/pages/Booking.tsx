@@ -7,7 +7,7 @@ import { getImageUrl } from '../utils/movie';
 const Booking = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const movieId = searchParams.get('movie');
+  const movieId = searchParams.get('movieId');
   
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedShowtime, setSelectedShowtime] = useState<string>('');
@@ -258,18 +258,9 @@ const Booking = () => {
             <p><strong>Price per ticket:</strong> $15.99</p>
             <p><strong>Total:</strong> ${(selectedSeats.length * 15.99).toFixed(2)}</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex justify-center">
             <button 
-              className="flex-1 bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600"
-              onClick={() => {
-                // Add to cart functionality (simple alert for now)
-                alert(`Added ${selectedSeats.length} seats to cart for ${movie.title}`);
-              }}
-            >
-              Add to Cart
-            </button>
-            <button 
-              className="flex-1 bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600"
+              className="bg-blue-500 text-white py-3 px-8 rounded-lg hover:bg-blue-600 font-semibold"
               onClick={() => {
                 // Direct booking - navigate to customer info form
                 const bookingData = {

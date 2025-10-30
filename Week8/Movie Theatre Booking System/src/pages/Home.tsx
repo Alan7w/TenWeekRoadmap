@@ -4,7 +4,7 @@ import { getImageUrl } from '../utils/movie';
 
 const Home = () => {
   const { data: moviesData, isLoading } = usePopularMovies();
-  const featuredMovies = moviesData?.results?.slice(0, 3) || [];
+  const featuredMovies = moviesData?.results?.slice(1, 4) || [];
   return (
     <div>
       <div className="text-center mb-8">
@@ -58,16 +58,6 @@ const Home = () => {
           </p>
           <Link to="/booking" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 inline-block">
             Book Now
-          </Link>
-        </div>
-
-        <div className="bg-white p-6 rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-3">🛒 Manage Cart</h3>
-          <p className="text-gray-600 mb-4">
-            Review your selections and complete your movie booking.
-          </p>
-          <Link to="/cart" className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 inline-block">
-            View Cart
           </Link>
         </div>
       </div>
