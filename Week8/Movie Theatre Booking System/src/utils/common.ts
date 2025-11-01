@@ -5,37 +5,6 @@ export const generateId = (): string => {
   return Math.random().toString(36).substring(2) + Date.now().toString(36)
 }
 
-// Future utility functions - currently unused but prepared for feature development
-// Uncomment when implementing search/filtering or performance optimization features
-// export const debounce = <T extends (...args: unknown[]) => unknown>(
-//   func: T,
-//   delay: number
-// ): ((...args: Parameters<T>) => void) => {
-//   let timeoutId: number
-//   return (...args: Parameters<T>) => {
-//     clearTimeout(timeoutId)
-//     timeoutId = window.setTimeout(() => func(...args), delay)
-//   }
-// }
-
-// export const throttle = <T extends (...args: unknown[]) => unknown>(
-//   func: T,
-//   delay: number
-// ): ((...args: Parameters<T>) => void) => {
-//   let lastCall = 0
-//   return (...args: Parameters<T>) => {
-//     const now = Date.now()
-//     if (now - lastCall >= delay) {
-//       lastCall = now
-//       func(...args)
-//     }
-//   }
-// }
-
-// export const sleep = (ms: number): Promise<void> => {
-//   return new Promise(resolve => setTimeout(resolve, ms))
-// }
-
 /**
  * Check if device is mobile
  */
@@ -55,38 +24,6 @@ export const isTablet = (): boolean => {
  */
 export const clamp = (value: number, min: number, max: number): number => {
   return Math.min(Math.max(value, min), max)
-}
-
-/**
- * Format file size in human readable format
- */
-export const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) return '0 Bytes'
-  
-  const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-}
-
-/**
- * Copy text to clipboard
- */
-export const copyToClipboard = async (text: string): Promise<boolean> => {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch {
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea')
-    textArea.value = text
-    document.body.appendChild(textArea)
-    textArea.select()
-    const success = document.execCommand('copy')
-    document.body.removeChild(textArea)
-    return success
-  }
 }
 
 /**
@@ -115,25 +52,6 @@ export const getBrowserName = (): string => {
   if (userAgent.includes('Opera')) return 'Opera'
   
   return 'Unknown'
-}
-
-/**
- * Deep clone an object
- */
-export const deepClone = <T>(obj: T): T => {
-  if (obj === null || typeof obj !== 'object') return obj
-  if (obj instanceof Date) return new Date(obj.getTime()) as unknown as T
-  if (obj instanceof Array) return obj.map(item => deepClone(item)) as unknown as T
-  if (typeof obj === 'object') {
-    const clonedObj = {} as T
-    for (const key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        clonedObj[key] = deepClone(obj[key])
-      }
-    }
-    return clonedObj
-  }
-  return obj
 }
 
 /**

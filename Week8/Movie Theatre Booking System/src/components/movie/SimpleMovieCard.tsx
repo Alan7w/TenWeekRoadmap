@@ -38,7 +38,7 @@ export const SimpleMovieCard = ({ movie, className = '' }: SimpleMovieCardProps)
             View Details
           </Link>
           <Link 
-            to={`/booking?movie=${movie.id}`}
+            to={`/booking?movieId=${movie.id}`}
             className="flex-1 bg-green-500 text-white py-2 px-4 rounded text-center hover:bg-green-600 transition-colors"
           >
             Book Now

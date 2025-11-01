@@ -62,27 +62,6 @@ export interface MovieVideo {
   published_at: string
 }
 
-export interface MovieCredits {
-  cast: CastMember[]
-  crew: CrewMember[]
-}
-
-export interface CastMember {
-  id: number
-  name: string
-  character: string
-  profile_path: string | null
-  order: number
-}
-
-export interface CrewMember {
-  id: number
-  name: string
-  job: string
-  department: string
-  profile_path: string | null
-}
-
 // API Response Types
 export interface MoviesResponse {
   page: number
@@ -94,10 +73,4 @@ export interface MoviesResponse {
 export interface MovieVideosResponse {
   id: number
   results: MovieVideo[]
-}
-
-export interface MovieCreditsResponse {
-  id: number
-  cast: CastMember[]
-  crew: CrewMember[]
 }

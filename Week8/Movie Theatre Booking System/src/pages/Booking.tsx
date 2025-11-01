@@ -12,6 +12,7 @@ const Booking = () => {
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedShowtime, setSelectedShowtime] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+  const [takenSeats, setTakenSeats] = useState<string[]>([]);
   
   // Fetch movie details if movieId is provided
   const { data: movie, isLoading, error } = useMovieDetails(
@@ -19,25 +20,97 @@ const Booking = () => {
     !!movieId
   );
 
-  // Generate dates for the next 7 days
-  const generateDates = () => {
+  // Generate available dates (next 14 days starting from today)
+  const generateAvailableDates = () => {
     const dates = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() + i);
+    const today = new Date();
+    
+    for (let i = 0; i < 14; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+      
       dates.push({
         value: date.toISOString().split('T')[0],
         label: date.toLocaleDateString('en-US', { 
           weekday: 'short', 
           month: 'short', 
           day: 'numeric' 
-        })
+        }),
+        dayOfWeek: date.getDay(),
+        isToday: i === 0
       });
     }
     return dates;
   };
 
-  const availableDates = generateDates();
+  const availableDates = generateAvailableDates();
+
+  // Generate dynamic showtimes based on selected date
+  const generateShowtimes = (dateValue: string) => {
+    if (!dateValue) return [];
+    
+    const selectedDateObj = new Date(dateValue);
+    const today = new Date();
+    const isToday = selectedDateObj.toDateString() === today.toDateString();
+    const currentHour = today.getHours();
+    
+    const allShowtimes = ["2:00 PM", "5:30 PM", "7:30 PM", "9:15 PM"];
+    const showtimeHours = [14, 17.5, 19.5, 21.25]; // Convert to 24-hour format
+    
+    if (isToday) {
+      // Filter out past showtimes for today
+      return allShowtimes.filter((_, index) => showtimeHours[index] > currentHour);
+    }
+    
+    return allShowtimes;
+  };
+
+  const availableShowtimes = generateShowtimes(selectedDate);
+
+  // Generate random taken seats based on date and showtime
+  const generateTakenSeats = (date: string, showtime: string) => {
+    if (!date || !showtime) return [];
+    
+    // Create a seed based on date and showtime for consistent randomness
+    const seed = `${date}_${showtime}`.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const random = (seed: number) => {
+      const x = Math.sin(seed) * 10000;
+      return x - Math.floor(x);
+    };
+    
+    const rows = ['A', 'B', 'C', 'D', 'E'];
+    const seatsPerRow = 10;
+    const allSeatIds = [];
+    
+    // Generate all seat IDs
+    for (const row of rows) {
+      for (let i = 1; i <= seatsPerRow; i++) {
+        allSeatIds.push(`${row}${i}`);
+      }
+    }
+    
+    // Determine number of taken seats (between 5-25 seats randomly)
+    const numTakenSeats = Math.floor(random(seed) * 20) + 5;
+    const taken: string[] = [];
+    
+    // Select random seats to be taken
+    for (let i = 0; i < numTakenSeats; i++) {
+      const seatIndex = Math.floor(random(seed + i) * allSeatIds.length);
+      if (!taken.includes(allSeatIds[seatIndex])) {
+        taken.push(allSeatIds[seatIndex]);
+      }
+    }
+    
+    return taken;
+  };
+
+  // Update taken seats when date or showtime changes
+  useEffect(() => {
+    const newTakenSeats = generateTakenSeats(selectedDate, selectedShowtime);
+    setTakenSeats(newTakenSeats);
+    // Clear selected seats when changing date/time to avoid conflicts
+    setSelectedSeats(prev => prev.filter(seat => !newTakenSeats.includes(seat)));
+  }, [selectedDate, selectedShowtime]);
 
   // Set default date to today
   useEffect(() => {
@@ -45,9 +118,6 @@ const Booking = () => {
       setSelectedDate(availableDates[0].value);
     }
   }, [availableDates, selectedDate]);
-
-  // Mock showtimes based on selected date
-  const showtimes = ["2:00 PM", "5:30 PM", "7:30 PM", "9:15 PM"];
 
   // Show loading state
   if (movieId && isLoading) {
@@ -107,10 +177,9 @@ const Booking = () => {
   };
 
   const allSeats = generateSeats();
-  const bookedSeats = ['A3', 'A4', 'B5', 'C7', 'C8', 'D2']; // Mock booked seats
 
   const toggleSeat = (seat: string) => {
-    if (bookedSeats.includes(seat)) return;
+    if (takenSeats.includes(seat)) return;
     
     setSelectedSeats(prev => 
       prev.includes(seat) 
@@ -120,7 +189,7 @@ const Booking = () => {
   };
 
   const getSeatStyle = (seat: string) => {
-    if (bookedSeats.includes(seat)) {
+    if (takenSeats.includes(seat)) {
       return 'bg-red-500 text-white cursor-not-allowed';
     }
     if (selectedSeats.includes(seat)) {
@@ -161,22 +230,31 @@ const Booking = () => {
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h3 className="text-xl font-semibold mb-4">Select Date</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
-          {availableDates.map((date) => (
-            <button
-              key={date.value}
-              onClick={() => {
-                setSelectedDate(date.value);
-                setSelectedShowtime(''); // Reset showtime when date changes
-              }}
-              className={`p-3 rounded border-2 text-center ${
-                selectedDate === date.value
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
-                  : 'border-gray-300 hover:border-gray-400'
-              }`}
-            >
-              {date.label}
-            </button>
-          ))}
+          {availableDates.map((date) => {
+            const showtimesForDate = generateShowtimes(date.value);
+            return (
+              <button
+                key={date.value}
+                onClick={() => {
+                  setSelectedDate(date.value);
+                  setSelectedShowtime(''); // Reset showtime when date changes
+                }}
+                className={`p-3 rounded border-2 text-center transition-colors ${
+                  selectedDate === date.value
+                    ? 'border-blue-500 bg-blue-50 text-blue-700'
+                    : 'border-gray-300 hover:border-gray-400'
+                }`}
+              >
+                <div className="font-medium">{date.label}</div>
+                {date.isToday && (
+                  <div className="text-xs text-green-600 font-medium">Today</div>
+                )}
+                <div className="text-xs text-gray-500 mt-1">
+                  {showtimesForDate.length} show{showtimesForDate.length !== 1 ? 's' : ''}
+                </div>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -184,28 +262,37 @@ const Booking = () => {
       {selectedDate && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
           <h3 className="text-xl font-semibold mb-4">Select Showtime</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {showtimes.map((time) => (
-              <button
-                key={time}
-                onClick={() => setSelectedShowtime(time)}
-                className={`p-3 rounded border-2 ${
-                  selectedShowtime === time
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 hover:border-gray-400'
-                }`}
-              >
-                {time}
-              </button>
-            ))}
-          </div>
+          {availableShowtimes.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {availableShowtimes.map((time) => (
+                <button
+                  key={time}
+                  onClick={() => setSelectedShowtime(time)}
+                  className={`p-3 rounded border-2 ${
+                    selectedShowtime === time
+                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                      : 'border-gray-300 hover:border-gray-400'
+                  }`}
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">No more showtimes available for today.</p>
+          )}
         </div>
       )}
 
       {/* Seat Selection */}
       {selectedDate && selectedShowtime && (
         <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h3 className="text-xl font-semibold mb-4">Select Seats</h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-semibold">Select Seats</h3>
+          <div className="text-sm text-gray-600">
+            {allSeats.length - takenSeats.length} of {allSeats.length} seats available
+          </div>
+        </div>
         
         {/* Screen */}
         <div className="text-center mb-6">
@@ -221,7 +308,7 @@ const Booking = () => {
               key={seat}
               onClick={() => toggleSeat(seat)}
               className={`w-8 h-8 text-xs font-medium rounded ${getSeatStyle(seat)}`}
-              disabled={bookedSeats.includes(seat)}
+              disabled={takenSeats.includes(seat)}
             >
               {seat}
             </button>

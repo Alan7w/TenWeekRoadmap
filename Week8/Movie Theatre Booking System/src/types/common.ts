@@ -18,23 +18,6 @@ export interface LoadingState {
   error: string | null
 }
 
-// Future expansion types - currently unused but prepared for feature development
-// Uncomment when implementing search/filtering functionality
-// export interface SearchFilters {
-//   query: string
-//   genre: string
-//   year: string
-//   sortBy: 'popularity' | 'release_date' | 'vote_average' | 'title'
-//   sortOrder: 'asc' | 'desc'
-// }
-
-// export interface PaginationInfo {
-//   currentPage: number
-//   totalPages: number
-//   totalResults: number
-//   resultsPerPage: number
-// }
-
 // Form Validation Types
 export interface ValidationError {
   field: string

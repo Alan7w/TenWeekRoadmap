@@ -3,7 +3,6 @@ import type {
   MovieDetails, 
   MoviesResponse, 
   MovieVideosResponse, 
-  MovieCreditsResponse 
 } from '../types'
 import { TMDB_API } from '../constants'
 
@@ -17,7 +16,10 @@ export class MovieService {
   static async getPopularMovies(page: number = 1): Promise<MoviesResponse> {
     return apiCall(() =>
       apiClient.get<MoviesResponse>(TMDB_API.ENDPOINTS.POPULAR_MOVIES, {
-        params: { page }
+        params: { 
+          page,
+          per_page: 20 // TMDB maximum is typically 20
+        }
       })
     )
   }
@@ -76,16 +78,6 @@ export class MovieService {
   }
 
   /**
-   * Get movie credits (cast and crew)
-   */
-  static async getMovieCredits(movieId: number): Promise<MovieCreditsResponse> {
-    const endpoint = buildEndpoint(TMDB_API.ENDPOINTS.MOVIE_CREDITS, { id: movieId })
-    return apiCall(() =>
-      apiClient.get<MovieCreditsResponse>(endpoint)
-    )
-  }
-
-  /**
    * Search movies by query
    */
   static async searchMovies(query: string, page: number = 1): Promise<MoviesResponse> {
@@ -120,6 +112,7 @@ export class MovieService {
   } = {}): Promise<MoviesResponse> {
     const params: Record<string, string | number> = {
       page: filters.page || 1,
+      per_page: 20, // TMDB maximum per page
     }
 
     if (filters.genre) {
@@ -174,7 +167,6 @@ export const {
   getUpcomingMovies,
   getMovieDetails,
   getMovieVideos,
-  getMovieCredits,
   searchMovies,
   getGenres,
   discoverMovies,

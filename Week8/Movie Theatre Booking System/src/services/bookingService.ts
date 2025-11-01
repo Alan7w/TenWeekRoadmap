@@ -1,4 +1,4 @@
-import type { Booking, Seat, Showtime, Theatre, CustomerInfo, Ticket } from '../types'
+import type { Booking, Seat, Showtime, CustomerInfo, Ticket } from '../types'
 import { generateId } from '../utils'
 import { STORAGE_KEYS, BOOKING_CONFIG } from '../constants'
 
@@ -40,21 +40,6 @@ export class BookingService {
     }
     
     return showtimes
-  }
-
-  /**
-   * Get theatre information
-   */
-  static getTheatre(theatreId: string): Theatre {
-    // For demo purposes, return a sample theatre
-    return {
-      id: theatreId,
-      name: 'Cinema Plus Theatre 1',
-      location: 'Screen 1, Level 2',
-      rows: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
-      seatsPerRow: 12,
-      seatLayout: [] // Will be generated dynamically
-    }
   }
 
   /**

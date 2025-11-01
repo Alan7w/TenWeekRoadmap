@@ -1,5 +1,5 @@
 import type { Seat, SeatType } from '../types'
-import { THEATRE_CONFIG, BOOKING_CONFIG } from '../constants'
+import { THEATRE_CONFIG } from '../constants'
 
 /**
  * Generate seat ID from row and number
@@ -64,33 +64,6 @@ export const calculateTotalPrice = (seats: Seat[]): number => {
 }
 
 /**
- * Check if seat selection is valid
- */
-export const validateSeatSelection = (seats: Seat[]): { isValid: boolean; error?: string } => {
-  if (seats.length === 0) {
-    return { isValid: false, error: 'Please select at least one seat' }
-  }
-  
-  if (seats.length > BOOKING_CONFIG.MAX_SEATS_PER_BOOKING) {
-    return { 
-      isValid: false, 
-      error: `Maximum ${BOOKING_CONFIG.MAX_SEATS_PER_BOOKING} seats allowed per booking` 
-    }
-  }
-  
-  // Check if all seats are available
-  const unavailableSeats = seats.filter(seat => seat.status !== 'available' && seat.status !== 'selected')
-  if (unavailableSeats.length > 0) {
-    return { 
-      isValid: false, 
-      error: 'Some selected seats are no longer available' 
-    }
-  }
-  
-  return { isValid: true }
-}
-
-/**
  * Get seat display name (e.g., "A5")
  */
 export const getSeatDisplayName = (seat: Seat): string => {
@@ -108,33 +81,6 @@ export const groupSeatsByRow = (seats: Seat[]): Record<string, Seat[]> => {
     groups[seat.row].push(seat)
     return groups
   }, {} as Record<string, Seat[]>)
-}
-
-/**
- * Check if seats are consecutive
- */
-export const areSeatsConsecutive = (seats: Seat[]): boolean => {
-  if (seats.length <= 1) return true
-  
-  // Group by row
-  const seatsByRow = groupSeatsByRow(seats)
-  
-  // Check each row
-  for (const rowSeats of Object.values(seatsByRow)) {
-    if (rowSeats.length <= 1) continue
-    
-    // Sort seats by number
-    const sortedSeats = rowSeats.sort((a, b) => a.number - b.number)
-    
-    // Check if consecutive
-    for (let i = 1; i < sortedSeats.length; i++) {
-      if (sortedSeats[i].number - sortedSeats[i - 1].number !== 1) {
-        return false
-      }
-    }
-  }
-  
-  return true
 }
 
 /**

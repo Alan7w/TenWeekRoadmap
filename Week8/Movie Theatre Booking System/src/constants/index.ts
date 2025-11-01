@@ -67,7 +67,6 @@ export const THEATRE_CONFIG = {
 
 // Booking Configuration
 export const BOOKING_CONFIG = {
-  MAX_SEATS_PER_BOOKING: 8,
   SEAT_HOLD_TIME: 10 * 60 * 1000, // 10 minutes in milliseconds
   PAYMENT_TIMEOUT: 5 * 60 * 1000, // 5 minutes in milliseconds
 } as const
@@ -80,31 +79,3 @@ export const STORAGE_KEYS = {
   CUSTOMER_INFO: 'customer_info',
   APP_THEME: 'app_theme',
 } as const
-
-// Future expansion constants - currently unused but prepared for feature development
-// export const UI_CONFIG = {
-//   DEBOUNCE_DELAY: 300,
-//   PAGINATION_SIZE: 20,
-//   MOBILE_BREAKPOINT: 768,
-//   TABLET_BREAKPOINT: 1024,
-//   MAX_POSTER_WIDTH: 500,
-//   DEFAULT_POSTER_WIDTH: 342,
-// } as const
-
-// export const ERROR_MESSAGES = {
-//   NETWORK_ERROR: 'Network error. Please check your connection.',
-//   API_ERROR: 'Unable to fetch data. Please try again later.',
-//   NO_RESULTS: 'No results found for your search.',
-//   BOOKING_ERROR: 'Unable to complete booking. Please try again.',
-//   VALIDATION_ERROR: 'Please check the form for errors.',
-//   SEAT_UNAVAILABLE: 'Selected seat is no longer available.',
-//   MAX_SEATS_EXCEEDED: `You can select maximum ${BOOKING_CONFIG.MAX_SEATS_PER_BOOKING} seats.`,
-//   SESSION_EXPIRED: 'Your session has expired. Please start again.',
-// } as const
-
-// Future expansion constants
-// export const SUCCESS_MESSAGES = {
-//   BOOKING_CONFIRMED: 'Booking confirmed successfully!',
-//   PAYMENT_PROCESSED: 'Payment processed successfully.',
-//   SEATS_SELECTED: 'Seats selected successfully.',
-// } as const

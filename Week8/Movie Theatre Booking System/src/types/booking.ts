@@ -13,15 +13,6 @@ export interface Seat {
   price: number
 }
 
-export interface Theatre {
-  id: string
-  name: string
-  location: string
-  rows: string[]
-  seatsPerRow: number
-  seatLayout: Seat[][]
-}
-
 export interface Showtime {
   id: string
   movieId: number

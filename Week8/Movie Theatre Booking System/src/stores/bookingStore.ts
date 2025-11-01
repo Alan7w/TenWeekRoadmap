@@ -1,12 +1,11 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
-import type { Booking, Seat, Showtime, Theatre, CustomerInfo } from '../types'
+import type { Booking, Seat, Showtime, CustomerInfo } from '../types'
 
 // Booking store state interface
 interface BookingState {
   // Current booking flow data
   selectedMovie: { id: number; title: string; poster_path: string | null } | null
-  selectedTheatre: Theatre | null
   selectedShowtime: Showtime | null
   selectedSeats: Seat[]
   customerInfo: CustomerInfo | null
@@ -23,7 +22,6 @@ interface BookingState {
   bookingHistory: Booking[]
   
   // Theatre data
-  theatres: Theatre[]
   showtimes: Showtime[]
   
   // Seat management
@@ -32,7 +30,6 @@ interface BookingState {
   
   // Actions - Booking Flow
   selectMovie: (movie: { id: number; title: string; poster_path: string | null }) => void
-  selectTheatre: (theatre: Theatre) => void
   selectShowtime: (showtime: Showtime) => void
   selectSeat: (seat: Seat) => void
   deselectSeat: (seatId: string) => void
@@ -46,7 +43,6 @@ interface BookingState {
   resetBookingFlow: () => void
   
   // Actions - Data Management
-  setTheatres: (theatres: Theatre[]) => void
   setShowtimes: (showtimes: Showtime[]) => void
   addBooking: (booking: Booking) => void
   
@@ -106,21 +102,12 @@ export const useBookingStore = create<BookingState>()(
         selectMovie: (movie) => {
           set({ 
             selectedMovie: movie,
-            selectedTheatre: null,
             selectedShowtime: null,
             selectedSeats: [],
             currentStep: 'showtime'
           }, false, 'selectMovie')
         },
-        
-        selectTheatre: (theatre) => {
-          set({ 
-            selectedTheatre: theatre,
-            selectedShowtime: null,
-            selectedSeats: []
-          }, false, 'selectTheatre')
-        },
-        
+       
         selectShowtime: (showtime) => {
           set({ 
             selectedShowtime: showtime,
@@ -188,13 +175,7 @@ export const useBookingStore = create<BookingState>()(
           set({
             ...initialBookingState,
             bookingHistory: get().bookingHistory, // Preserve history
-            theatres: get().theatres, // Preserve theatre data
           }, false, 'resetBookingFlow')
-        },
-        
-        // Data management
-        setTheatres: (theatres) => {
-          set({ theatres }, false, 'setTheatres')
         },
         
         setShowtimes: (showtimes) => {
@@ -315,7 +296,6 @@ export const useBookingStore = create<BookingState>()(
 export const bookingSelectors = {
   // Current booking selectors
   useSelectedMovie: () => useBookingStore((state) => state.selectedMovie),
-  useSelectedTheatre: () => useBookingStore((state) => state.selectedTheatre),
   useSelectedShowtime: () => useBookingStore((state) => state.selectedShowtime),
   useSelectedSeats: () => useBookingStore((state) => state.selectedSeats),
   useCustomerInfo: () => useBookingStore((state) => state.customerInfo),
@@ -333,7 +313,6 @@ export const bookingSelectors = {
   }),
   
   // Data selectors
-  useTheatres: () => useBookingStore((state) => state.theatres),
   useShowtimes: () => useBookingStore((state) => state.showtimes),
   useBookingHistory: () => useBookingStore((state) => state.bookingHistory),
   
@@ -356,7 +335,6 @@ export const bookingSelectors = {
   // Combined selectors for common use cases
   useBookingSummary: () => useBookingStore((state) => ({
     movie: state.selectedMovie,
-    theatre: state.selectedTheatre,
     showtime: state.selectedShowtime,
     seats: state.selectedSeats,
     totalPrice: state.getTotalPrice(),

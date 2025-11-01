@@ -80,17 +80,6 @@ export const useMovieVideos = (movieId: number, enabled: boolean = true) => {
   })
 }
 
-// Hook for movie credits
-export const useMovieCredits = (movieId: number, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: MOVIE_QUERY_KEYS.credits(movieId),
-    queryFn: () => MovieService.getMovieCredits(movieId),
-    enabled: enabled && !!movieId,
-    staleTime: 60 * 60 * 1000, // 1 hour
-    gcTime: 2 * 60 * 60 * 1000,
-  })
-}
-
 // Hook for movie search
 export const useMovieSearch = (query: string, page: number = 1, enabled: boolean = true) => {
   return useQuery({
@@ -190,5 +179,84 @@ export const useMovieRecommendations = (movieId: number, enabled: boolean = true
     enabled: enabled && !!movieId,
     staleTime: 15 * 60 * 1000, // 15 minutes
     gcTime: 30 * 60 * 1000,
+  })
+}
+
+// Hook for popular movies with 100 results (fetches 5 pages of 20 each)
+export const usePopularMovies100 = (page: number = 1, enabled: boolean = true) => {
+  return useQuery({
+    queryKey: MOVIE_QUERY_KEYS.list(`popular-100-${page}`),
+    queryFn: async () => {
+      // Calculate which TMDB pages we need (each page has 20 movies, we want 100)
+      const startPage = (page - 1) * 5 + 1;
+      const endPage = startPage + 4;
+      
+      // Fetch 5 consecutive pages from TMDB
+      const promises = [];
+      for (let i = startPage; i <= endPage; i++) {
+        promises.push(MovieService.getPopularMovies(i));
+      }
+      
+      const responses = await Promise.all(promises);
+      
+      // Combine all results
+      const allMovies = responses.flatMap(response => response.results);
+      
+      // Return in the same format as TMDB response
+      return {
+        page: page,
+        results: allMovies,
+        total_pages: Math.ceil(responses[0].total_pages / 5), // Adjusted total pages
+        total_results: responses[0].total_results
+      };
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
+  })
+}
+
+// Hook for discover movies with 100 results
+export const useDiscoverMovies100 = (
+  filters: {
+    page?: number
+    genre?: string
+    year?: number
+    sortBy?: string
+    rating?: number
+  } = {},
+  enabled: boolean = true
+) => {
+  const filterKey = JSON.stringify(filters)
+  
+  return useQuery({
+    queryKey: MOVIE_QUERY_KEYS.list(`discover-100-${filterKey}`),
+    queryFn: async () => {
+      // Calculate which TMDB pages we need (each page has 20 movies, we want 100)
+      const startPage = ((filters.page || 1) - 1) * 5 + 1;
+      const endPage = startPage + 4;
+      
+      // Fetch 5 consecutive pages from TMDB
+      const promises = [];
+      for (let i = startPage; i <= endPage; i++) {
+        promises.push(MovieService.discoverMovies({ ...filters, page: i }));
+      }
+      
+      const responses = await Promise.all(promises);
+      
+      // Combine all results
+      const allMovies = responses.flatMap(response => response.results);
+      
+      // Return in the same format as TMDB response
+      return {
+        page: filters.page || 1,
+        results: allMovies,
+        total_pages: Math.ceil(responses[0].total_pages / 5), // Adjusted total pages
+        total_results: responses[0].total_results
+      };
+    },
+    enabled,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   })
 }

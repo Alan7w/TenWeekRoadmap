@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePopularMovies, useMovieSearch } from '../hooks/useMovies';
+import { usePopularMovies100, useMovieSearch, useGenres, useDiscoverMovies100 } from '../hooks/useMovies';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
 import { SimpleMovieCard } from '../components/movie/SimpleMovieCard';
 import { getImageUrl } from '../utils/movie';
@@ -14,6 +14,8 @@ const Movies = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [selectedGenre, setSelectedGenre] = useState<string>('');
+  const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   // Debounce search query for suggestions
@@ -25,8 +27,25 @@ const Movies = () => {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Always show popular movies in the main grid
-  const { data: popularData, isLoading: popularLoading, error: popularError } = usePopularMovies(currentPage);
+  // Fetch genres
+  const { data: genresData, isLoading: genresLoading } = useGenres();
+  const genres = genresData?.genres || [];
+
+  // Determine which data source to use based on filters
+  const hasFilters = Boolean((selectedGenre || selectedRating) && !debouncedSearchQuery);
+  
+  // Popular movies (default view) - 100 movies per page
+  const { data: popularData, isLoading: popularLoading, error: popularError } = usePopularMovies100(currentPage, !hasFilters);
+  
+  // Filtered movies (genre and/or rating) - 100 movies per page
+  const { data: filteredData, isLoading: filteredLoading, error: filteredError } = useDiscoverMovies100(
+    { 
+      page: currentPage, 
+      genre: selectedGenre || undefined,
+      rating: selectedRating || undefined
+    },
+    hasFilters
+  );
   
   // Use search for suggestions only
   const { data: searchSuggestions, isLoading: suggestionsLoading } = useMovieSearch(
@@ -35,12 +54,14 @@ const Movies = () => {
     debouncedSearchQuery.length >= 2
   );
 
-  const data = popularData;
-  const isLoading = popularLoading;
-  const error = popularError;
+  // Select appropriate data source
+  const data = hasFilters ? filteredData : popularData;
+  const isLoading = hasFilters ? filteredLoading : popularLoading;
+  const error = hasFilters ? filteredError : popularError;
 
   const movies = data?.results || [];
-  const displayMovies = movies.slice(1); // Always skip first movie for popular movies
+  // For popular movies, skip first movie (broken image issue), for filtered movies show all
+  const displayMovies = hasFilters ? movies : movies.slice(1);
   const suggestions = searchSuggestions?.results?.slice(0, 8) || []; // Limit to 8 suggestions
 
   // Close suggestions when clicking outside
@@ -154,11 +175,29 @@ const Movies = () => {
     setSearchQuery('');
   };
 
+  const handleGenreSelect = (genreId: string) => {
+    setSelectedGenre(genreId === selectedGenre ? '' : genreId);
+    setCurrentPage(1); // Reset to page 1 when changing genre
+    setSelectedMovie(null); // Clear selected movie
+  };
+
+  const clearGenreFilter = () => {
+    setSelectedGenre('');
+    setCurrentPage(1);
+  };
+
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">Popular Movies</h1>
-        <p className="text-gray-600">Discover the most popular movies from TMDB</p>
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          {selectedGenre ? 'Movies by Genre' : 'Popular Movies'}
+        </h1>
+        <p className="text-gray-600">
+          {selectedGenre 
+            ? `Browse movies in the ${genres.find(g => g.id.toString() === selectedGenre)?.name || 'selected'} genre`
+            : 'Discover the most popular movies from TMDB'
+          }
+        </p>
       </div>
 
       {/* Search Input with Autocomplete */}
@@ -219,6 +258,83 @@ const Movies = () => {
         </div>
       </div>
 
+      {/* Genre Filter Bar */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Filter by Genre:</h3>
+          {selectedGenre && (
+            <button
+              onClick={clearGenreFilter}
+              className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors"
+            >
+              Clear Filter ×
+            </button>
+          )}
+        </div>
+        {genresLoading ? (
+          <div className="flex items-center gap-2 text-gray-500">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            Loading genres...
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-2">
+            {genres.map((genre) => (
+              <button
+                key={genre.id}
+                onClick={() => handleGenreSelect(genre.id.toString())}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedGenre === genre.id.toString()
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                }`}
+              >
+                {genre.name}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Rating Filter Bar */}
+      <div className="mb-6">
+        <div className="flex items-center gap-4 mb-4">
+          <h3 className="text-lg font-semibold text-gray-900">Filter by Rating:</h3>
+          {selectedRating && (
+            <button
+              onClick={() => setSelectedRating(null)}
+              className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors"
+            >
+              Clear Filter ×
+            </button>
+          )}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setSelectedRating(null)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              !selectedRating
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+            }`}
+          >
+            Any Rating
+          </button>
+          {[9, 8, 7, 6, 5].map((rating) => (
+            <button
+              key={rating}
+              onClick={() => setSelectedRating(rating)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedRating === rating
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+              }`}
+            >
+              {rating}+ ⭐
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Selected Movie Card */}
       {selectedMovie && (
         <div className="mb-8 bg-white rounded-lg shadow-lg p-6">
@@ -274,7 +390,7 @@ const Movies = () => {
         </div>
       )}
 
-      {/* Pagination Controls */}
+      {/* Load More / Pagination Controls */}
       {data && data.total_pages > 1 && (
         <div className="mb-6 flex justify-center items-center gap-4 bg-white p-4 rounded-lg shadow">
           <button
@@ -315,18 +431,62 @@ const Movies = () => {
           <p className="text-gray-500">Try refreshing the page</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-8 gap-3">
           {displayMovies.map((movie: Movie) => (
-            <SimpleMovieCard key={movie.id} movie={movie} />
+            <SimpleMovieCard key={movie.id} movie={movie} className="text-sm" />
           ))}
+        </div>
+      )}
+
+      {/* Bottom Pagination Controls - Duplicate */}
+      {data && data.total_pages > 1 && (
+        <div className="mt-6 flex justify-center items-center gap-4 bg-white p-4 rounded-lg shadow">
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage === 1}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            ← Previous
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-gray-600">Page</span>
+            <input
+              type="number"
+              min="1"
+              max={data.total_pages}
+              value={currentPage}
+              onChange={handlePageInput}
+              className="w-16 px-2 py-1 border border-gray-300 rounded text-center"
+            />
+            <span className="text-gray-600">of {data.total_pages}</span>
+          </div>
+
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage >= data.total_pages}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            Next →
+          </button>
         </div>
       )}
 
       {/* Results info */}
       {data && (
         <div className="mt-8 text-center text-gray-600">
-          <p>Showing {displayMovies.length} of {data.total_results} movies</p>
-          <p>Page {data.page} of {data.total_pages}</p>
+          <p>Showing {displayMovies.length} of {data.total_results.toLocaleString()} movies (up to 100 per page)</p>
+          <p>Page {data.page} of {data.total_pages.toLocaleString()}</p>
+          {selectedGenre && (
+            <p className="text-sm mt-1">
+              Filtered by: {genres.find(g => g.id.toString() === selectedGenre)?.name}
+            </p>
+          )}
+          {selectedRating && (
+            <p className="text-sm mt-1">
+              Minimum rating: {selectedRating}+ ⭐
+            </p>
+          )}
         </div>
       )}
     </div>
