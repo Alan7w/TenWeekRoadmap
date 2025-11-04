@@ -10,7 +10,6 @@ export const MOVIE_QUERY_KEYS = {
   details: () => [...MOVIE_QUERY_KEYS.all, 'detail'] as const,
   detail: (id: number) => [...MOVIE_QUERY_KEYS.details(), id] as const,
   videos: (id: number) => [...MOVIE_QUERY_KEYS.detail(id), 'videos'] as const,
-  credits: (id: number) => [...MOVIE_QUERY_KEYS.detail(id), 'credits'] as const,
   search: (query: string) => [...MOVIE_QUERY_KEYS.all, 'search', query] as const,
 }
 
@@ -33,28 +32,6 @@ export const useTopRatedMovies = (page: number = 1, enabled: boolean = true) => 
     enabled,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-  })
-}
-
-// Hook for now playing movies
-export const useNowPlayingMovies = (page: number = 1, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: MOVIE_QUERY_KEYS.list(`now-playing-${page}`),
-    queryFn: () => MovieService.getNowPlayingMovies(page),
-    enabled,
-    staleTime: 2 * 60 * 1000, // 2 minutes (more fresh for current movies)
-    gcTime: 5 * 60 * 1000,
-  })
-}
-
-// Hook for upcoming movies
-export const useUpcomingMovies = (page: number = 1, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: MOVIE_QUERY_KEYS.list(`upcoming-${page}`),
-    queryFn: () => MovieService.getUpcomingMovies(page),
-    enabled,
-    staleTime: 30 * 60 * 1000, // 30 minutes (upcoming movies change less frequently)
-    gcTime: 60 * 60 * 1000,
   })
 }
 
@@ -102,10 +79,6 @@ export const useInfiniteMovies = (
         return MovieService.getPopularMovies(page)
       case 'top_rated':
         return MovieService.getTopRatedMovies(page)
-      case 'now_playing':
-        return MovieService.getNowPlayingMovies(page)
-      case 'upcoming':
-        return MovieService.getUpcomingMovies(page)
       default:
         return MovieService.getPopularMovies(page)
     }
@@ -157,28 +130,6 @@ export const useDiscoverMovies = (
     enabled,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
-  })
-}
-
-// Hook for similar movies
-export const useSimilarMovies = (movieId: number, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: [...MOVIE_QUERY_KEYS.detail(movieId), 'similar'],
-    queryFn: () => MovieService.getSimilarMovies(movieId),
-    enabled: enabled && !!movieId,
-    staleTime: 15 * 60 * 1000, // 15 minutes
-    gcTime: 30 * 60 * 1000,
-  })
-}
-
-// Hook for movie recommendations
-export const useMovieRecommendations = (movieId: number, enabled: boolean = true) => {
-  return useQuery({
-    queryKey: [...MOVIE_QUERY_KEYS.detail(movieId), 'recommendations'],
-    queryFn: () => MovieService.getMovieRecommendations(movieId),
-    enabled: enabled && !!movieId,
-    staleTime: 15 * 60 * 1000, // 15 minutes
-    gcTime: 30 * 60 * 1000,
   })
 }
 

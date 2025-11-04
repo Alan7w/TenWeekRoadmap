@@ -83,8 +83,6 @@ function bookingReducer(state: BookingState, action: BookingAction): BookingStat
   }
 }
 
-
-
 // Provider component
 export function BookingProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(bookingReducer, initialState);

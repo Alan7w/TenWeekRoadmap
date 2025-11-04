@@ -36,28 +36,6 @@ export class MovieService {
   }
 
   /**
-   * Get now playing movies
-   */
-  static async getNowPlayingMovies(page: number = 1): Promise<MoviesResponse> {
-    return apiCall(() =>
-      apiClient.get<MoviesResponse>(TMDB_API.ENDPOINTS.NOW_PLAYING, {
-        params: { page }
-      })
-    )
-  }
-
-  /**
-   * Get upcoming movies
-   */
-  static async getUpcomingMovies(page: number = 1): Promise<MoviesResponse> {
-    return apiCall(() =>
-      apiClient.get<MoviesResponse>(TMDB_API.ENDPOINTS.UPCOMING, {
-        params: { page }
-      })
-    )
-  }
-
-  /**
    * Get movie details by ID
    */
   static async getMovieDetails(movieId: number): Promise<MovieDetails> {
@@ -135,41 +113,15 @@ export class MovieService {
       apiClient.get<MoviesResponse>('/discover/movie', { params })
     )
   }
-
-  /**
-   * Get similar movies
-   */
-  static async getSimilarMovies(movieId: number, page: number = 1): Promise<MoviesResponse> {
-    return apiCall(() =>
-      apiClient.get<MoviesResponse>(`/movie/${movieId}/similar`, {
-        params: { page }
-      })
-    )
-  }
-
-  /**
-   * Get movie recommendations
-   */
-  static async getMovieRecommendations(movieId: number, page: number = 1): Promise<MoviesResponse> {
-    return apiCall(() =>
-      apiClient.get<MoviesResponse>(`/movie/${movieId}/recommendations`, {
-        params: { page }
-      })
-    )
-  }
 }
 
 // Export individual functions for easier importing
 export const {
   getPopularMovies,
   getTopRatedMovies,
-  getNowPlayingMovies,
-  getUpcomingMovies,
   getMovieDetails,
   getMovieVideos,
   searchMovies,
   getGenres,
   discoverMovies,
-  getSimilarMovies,
-  getMovieRecommendations
 } = MovieService

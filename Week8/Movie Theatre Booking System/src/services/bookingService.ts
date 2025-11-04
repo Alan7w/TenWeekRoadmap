@@ -1,4 +1,4 @@
-import type { Booking, Seat, Showtime, CustomerInfo, Ticket } from '../types'
+import type { Booking, Seat, Showtime, CustomerInfo } from '../types'
 import { generateId } from '../utils'
 import { STORAGE_KEYS, BOOKING_CONFIG } from '../constants'
 
@@ -147,49 +147,6 @@ export class BookingService {
   }
 
   /**
-   * Generate tickets for a booking
-   */
-  static generateTickets(booking: Booking): Ticket[] {
-    return booking.selectedSeats.map(seat => ({
-      id: generateId(),
-      bookingId: booking.id,
-      movieTitle: `Movie ${booking.movieId}`, // In real app, fetch movie title
-      theatreName: 'Cinema Plus Theatre 1',
-      showtime: '19:20', // In real app, get from showtime
-      seat: {
-        row: seat.row,
-        number: seat.number,
-        type: seat.type
-      },
-      price: seat.price,
-      qrCode: this.generateQRCode(booking.id, seat.id)
-    }))
-  }
-
-  /**
-   * Generate QR code data for ticket
-   */
-  static generateQRCode(bookingId: string, seatId: string): string {
-    // In a real app, this would generate actual QR code data
-    return `TICKET-${bookingId}-${seatId}-${Date.now()}`
-  }
-
-  /**
-   * Cancel booking
-   */
-  static cancelBooking(bookingId: string): boolean {
-    const bookings = this.getBookings()
-    const bookingIndex = bookings.findIndex(b => b.id === bookingId)
-    
-    if (bookingIndex === -1) return false
-    
-    bookings[bookingIndex].status = 'cancelled'
-    localStorage.setItem(STORAGE_KEYS.BOOKING_STATE, JSON.stringify(bookings))
-    
-    return true
-  }
-
-  /**
    * Validate booking form data
    */
   static validateBookingForm(data: CustomerInfo): { isValid: boolean; errors: string[] } {
@@ -219,13 +176,5 @@ export class BookingService {
       isValid: errors.length === 0,
       errors
     }
-  }
-
-  /**
-   * Clear all booking data (for testing/demo)
-   */
-  static clearAllBookings(): void {
-    localStorage.removeItem(STORAGE_KEYS.BOOKING_STATE)
-    localStorage.removeItem(STORAGE_KEYS.SELECTED_SEATS)
   }
 }

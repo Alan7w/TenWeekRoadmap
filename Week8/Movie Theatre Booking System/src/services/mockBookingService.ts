@@ -95,44 +95,6 @@ export class MockBookingService {
     };
   }
 
-  // Process payment
-  static async processPayment(request: PaymentRequest): Promise<PaymentResponse> {
-    await delay(2000); // Simulate payment processing delay
-
-    const booking = bookings.get(request.bookingId);
-    if (!booking) {
-      return {
-        success: false,
-        transactionId: '',
-        message: 'Booking not found',
-        error: 'BOOKING_NOT_FOUND'
-      };
-    }
-
-    // Simulate payment failure (5% chance)
-    if (Math.random() < 0.05) {
-      return {
-        success: false,
-        transactionId: '',
-        message: 'Payment processing failed',
-        error: 'PAYMENT_FAILED'
-      };
-    }
-
-    // Update booking status
-    booking.status = 'confirmed';
-    booking.paymentStatus = 'paid';
-    bookings.set(request.bookingId, booking);
-
-    const transactionId = `TXN${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
-
-    return {
-      success: true,
-      transactionId,
-      message: 'Payment processed successfully'
-    };
-  }
-
   // Get booking details
   static async getBooking(bookingId: string): Promise<BookingResponse> {
     await delay(500);
@@ -151,45 +113,6 @@ export class MockBookingService {
       success: true,
       bookingId,
       message: 'Booking retrieved successfully',
-      booking
-    };
-  }
-
-  // Get user bookings (simulate user authentication)
-  static async getUserBookings(userEmail: string): Promise<BookingResponse['booking'][]> {
-    await delay(800);
-
-    const userBookings = Array.from(bookings.values()).filter(
-      (booking): booking is NonNullable<typeof booking> => 
-        booking != null && booking.customerInfo.email === userEmail
-    );
-
-    return userBookings.sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }
-
-  // Cancel booking
-  static async cancelBooking(bookingId: string): Promise<BookingResponse> {
-    await delay(1000);
-
-    const booking = bookings.get(bookingId);
-    if (!booking) {
-      return {
-        success: false,
-        bookingId: '',
-        message: 'Booking not found',
-        error: 'BOOKING_NOT_FOUND'
-      };
-    }
-
-    booking.status = 'cancelled';
-    bookings.set(bookingId, booking);
-
-    return {
-      success: true,
-      bookingId,
-      message: 'Booking cancelled successfully',
       booking
     };
   }
