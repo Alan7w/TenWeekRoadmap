@@ -1,16 +1,14 @@
 // Test utilities for React Testing Library
-import type { ReactElement } from 'react'
-import { render } from '@testing-library/react'
-import type { RenderOptions } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { vi, expect } from 'vitest'
-import type { TodoItem, TodoStatus, TodoPriority, TodoCategory } from '../types'
+import type { ReactElement } from 'react';
+import { render } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { vi, expect } from 'vitest';
+import type { TodoItem, TodoStatus, TodoPriority, TodoCategory } from '../types';
 
 // Custom render function that includes providers
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, { ...options });
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
+  render(ui, { ...options });
 
 // Mock todo item factory
 export const createMockTodo = (overrides: Partial<TodoItem> = {}): TodoItem => ({
@@ -36,27 +34,16 @@ export const createMockHandlers = () => ({
 // Common test data
 export const todoStatuses: TodoStatus[] = [
   'not-started',
-  'in-progress', 
+  'in-progress',
   'completed',
   'blocked',
   'cancelled',
-  'archived'
+  'archived',
 ];
 
-export const todoPriorities: TodoPriority[] = [
-  'low',
-  'medium',
-  'high', 
-  'critical'
-];
+export const todoPriorities: TodoPriority[] = ['low', 'medium', 'high', 'critical'];
 
-export const todoCategories: TodoCategory[] = [
-  'work',
-  'personal',
-  'shopping',
-  'health',
-  'other'
-];
+export const todoCategories: TodoCategory[] = ['work', 'personal', 'shopping', 'health', 'other'];
 
 // User event setup
 export const setupUser = () => userEvent.setup();
@@ -67,7 +54,7 @@ export const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, 
 // Custom queries and matchers
 export const queries = {
   getByTestId: (testId: string) => `[data-testid="${testId}"]`,
-  getByRole: (role: string, options?: { name?: string }) => 
+  getByRole: (role: string, options?: { name?: string }) =>
     options?.name ? `[role="${role}"][name="${options.name}"]` : `[role="${role}"]`,
 };
 
@@ -86,7 +73,10 @@ export const expectToHaveAriaLabel = (element: HTMLElement, label: string) => {
 };
 
 // Form interaction helpers
-export const fillForm = async (user: ReturnType<typeof userEvent.setup>, inputs: Record<string, string>) => {
+export const fillForm = async (
+  user: ReturnType<typeof userEvent.setup>,
+  inputs: Record<string, string>
+) => {
   for (const [testId, value] of Object.entries(inputs)) {
     const input = document.querySelector(`[data-testid="${testId}"]`) as HTMLInputElement;
     if (input) {
@@ -105,10 +95,10 @@ export const submitForm = async (user: ReturnType<typeof userEvent.setup>, formT
 
 // Re-export everything from testing-library
 // eslint-disable-next-line react-refresh/only-export-components
-export * from '@testing-library/react'
-export { default as userEvent } from '@testing-library/user-event'
-export { render as defaultRender }
-export { customRender as render }
+export * from '@testing-library/react';
+export { default as userEvent } from '@testing-library/user-event';
+export { render as defaultRender };
+export { customRender as render };
 
 // Export vi for mocking
-export { vi } from 'vitest'
+export { vi } from 'vitest';

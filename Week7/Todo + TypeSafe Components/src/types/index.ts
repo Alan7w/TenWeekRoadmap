@@ -6,45 +6,48 @@ export type Timestamp = string;
 export const USER_ROLES = {
   ADMIN: 'admin',
   USER: 'user',
-  GUEST: 'guest'
+  GUEST: 'guest',
 } as const;
 
-
-export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES];
+export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
 // User Permissions
 export const USER_PERMISSIONS = {
   READ: 1,
   WRITE: 2,
   DELETE: 4,
-  ADMIN: 8
+  ADMIN: 8,
 } as const;
 
-export type UserPermissionLevel = typeof USER_PERMISSIONS[keyof typeof USER_PERMISSIONS];
+export type UserPermissionLevel = (typeof USER_PERMISSIONS)[keyof typeof USER_PERMISSIONS];
 
 // Role Configuration
 export const ROLE_CONFIG = {
   [USER_ROLES.ADMIN]: {
-    permissions: USER_PERMISSIONS.READ | USER_PERMISSIONS.WRITE | USER_PERMISSIONS.DELETE | USER_PERMISSIONS.ADMIN,
+    permissions:
+      USER_PERMISSIONS.READ |
+      USER_PERMISSIONS.WRITE |
+      USER_PERMISSIONS.DELETE |
+      USER_PERMISSIONS.ADMIN,
     label: 'Administrator',
     description: 'Full system access',
-    color: '#dc2626'
+    color: '#dc2626',
   },
   [USER_ROLES.USER]: {
     permissions: USER_PERMISSIONS.READ | USER_PERMISSIONS.WRITE,
     label: 'User',
     description: 'Standard user access',
-    color: '#2563eb'
+    color: '#2563eb',
   },
   [USER_ROLES.GUEST]: {
     permissions: USER_PERMISSIONS.READ,
     label: 'Guest',
     description: 'Read-only access',
-    color: '#6b7280'
-  }
+    color: '#6b7280',
+  },
 } as const;
 
-export type RoleConfig = typeof ROLE_CONFIG[UserRole];
+export type RoleConfig = (typeof ROLE_CONFIG)[UserRole];
 
 // Todo Status System
 export const TODO_STATUS_CONFIGS = {
@@ -53,49 +56,47 @@ export const TODO_STATUS_CONFIGS = {
     color: '#6b7280',
     icon: '⚪',
     sortOrder: 1,
-    allowedTransitions: ['in-progress', 'cancelled']
+    allowedTransitions: ['in-progress', 'cancelled'],
   },
   'in-progress': {
     label: 'In Progress',
     color: '#2563eb',
     icon: '🔵',
     sortOrder: 2,
-    allowedTransitions: ['completed', 'blocked', 'cancelled']
+    allowedTransitions: ['completed', 'blocked', 'cancelled'],
   },
-  'completed': {
+  completed: {
     label: 'Completed',
     color: '#059669',
     icon: '✅',
     sortOrder: 3,
-    allowedTransitions: ['archived']
+    allowedTransitions: ['archived'],
   },
-  'blocked': {
+  blocked: {
     label: 'Blocked',
     color: '#dc2626',
     icon: '🔴',
     sortOrder: 4,
-    allowedTransitions: ['in-progress', 'cancelled']
+    allowedTransitions: ['in-progress', 'cancelled'],
   },
-  'cancelled': {
+  cancelled: {
     label: 'Cancelled',
     color: '#9333ea',
     icon: '❌',
     sortOrder: 5,
-    allowedTransitions: ['not-started']
+    allowedTransitions: ['not-started'],
   },
-  'archived': {
+  archived: {
     label: 'Archived',
     color: '#4b5563',
     icon: '📦',
     sortOrder: 6,
-    allowedTransitions: []
-  }
+    allowedTransitions: [],
+  },
 } as const;
 
-
 export type TodoStatusLiteral = keyof typeof TODO_STATUS_CONFIGS;
-export type StatusConfig = typeof TODO_STATUS_CONFIGS[TodoStatusLiteral];
-
+export type StatusConfig = (typeof TODO_STATUS_CONFIGS)[TodoStatusLiteral];
 
 export type UserStatus = 'active' | 'inactive' | 'pending' | 'banned';
 
@@ -120,9 +121,9 @@ export interface UserProfile {
   lastLoginAt?: Timestamp;
 }
 
-
-export type UpdateUserInput = Partial<Pick<UserProfile, 'name' | 'email' | 'bio' | 'avatarUrl' | 'preferences'>>;
-
+export type UpdateUserInput = Partial<
+  Pick<UserProfile, 'name' | 'email' | 'bio' | 'avatarUrl' | 'preferences'>
+>;
 
 export type TodoStatus = TodoStatusLiteral;
 
@@ -131,28 +132,23 @@ export function isValidUserRole(role: string): role is UserRole {
   return Object.values(USER_ROLES).includes(role as UserRole);
 }
 
-
 export function isValidTodoStatus(status: string): status is TodoStatus {
   return status in TODO_STATUS_CONFIGS;
 }
-
 
 export function hasPermission(role: UserRole, permission: UserPermissionLevel): boolean {
   const roleConfig = ROLE_CONFIG[role];
   return (roleConfig.permissions & permission) === permission;
 }
 
-
 export function canTransitionStatus(from: TodoStatus, to: TodoStatus): boolean {
   const fromConfig = TODO_STATUS_CONFIGS[from];
   return (fromConfig.allowedTransitions as readonly TodoStatus[]).includes(to);
 }
 
-
 export function getAvailableTransitions(currentStatus: TodoStatus): readonly TodoStatus[] {
   return TODO_STATUS_CONFIGS[currentStatus].allowedTransitions;
 }
-
 
 export function isHigherRole(role1: UserRole, role2: UserRole): boolean {
   const roleOrder = [USER_ROLES.GUEST, USER_ROLES.USER, USER_ROLES.ADMIN];
@@ -160,16 +156,20 @@ export function isHigherRole(role1: UserRole, role2: UserRole): boolean {
 }
 
 // Select Options
-export const userRoleOptions: SelectOption<UserRole>[] = Object.entries(ROLE_CONFIG).map(([role, config]) => ({
-  value: role as UserRole,
-  label: config.label,
-  description: config.description
-}));
+export const userRoleOptions: SelectOption<UserRole>[] = Object.entries(ROLE_CONFIG).map(
+  ([role, config]) => ({
+    value: role as UserRole,
+    label: config.label,
+    description: config.description,
+  })
+);
 
-export const todoStatusOptions: SelectOption<TodoStatus>[] = Object.entries(TODO_STATUS_CONFIGS).map(([status, config]) => ({
+export const todoStatusOptions: SelectOption<TodoStatus>[] = Object.entries(
+  TODO_STATUS_CONFIGS
+).map(([status, config]) => ({
   value: status as TodoStatus,
   label: `${config.icon} ${config.label}`,
-  description: `${config.allowedTransitions.length} transitions available`
+  description: `${config.allowedTransitions.length} transitions available`,
 }));
 
 // Todo Types
@@ -309,7 +309,8 @@ export interface SelectProps<T> extends BaseComponentProps {
   'aria-labelledby'?: string | undefined;
 }
 
-export interface MultiSelectProps<T> extends Omit<SelectProps<T>, 'value' | 'defaultValue' | 'onValueChange' | 'multiple'> {
+export interface MultiSelectProps<T>
+  extends Omit<SelectProps<T>, 'value' | 'defaultValue' | 'onValueChange' | 'multiple'> {
   value?: T[];
   defaultValue?: T[];
   onValueChange?: (values: T[]) => void;

@@ -5,14 +5,14 @@ import type { SelectContextValue } from '../types';
 
 export function useSelectContext<T>(): SelectContextValue<T> {
   const context = useContext(SelectContext);
-  
+
   if (!context) {
     throw new Error(
       'useSelectContext must be used within a SelectProvider. ' +
-      'Make sure your component is wrapped with a Select component.'
+        'Make sure your component is wrapped with a Select component.'
     );
   }
-  
+
   return context as SelectContextValue<T>;
 }
 
