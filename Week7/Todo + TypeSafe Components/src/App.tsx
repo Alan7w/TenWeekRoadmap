@@ -45,11 +45,12 @@ function App() {
       updatedAt: new Date().toISOString(),
       dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week from now
     };
-    setTodos((prev) => [...prev, newTodo]);
+    setTodos(prev => [...prev, newTodo]);
   };
 
   // Error handling
   const handleGlobalError = (errorReport: ErrorReport) => {
+    // eslint-disable-next-line no-console
     console.log('Global error reported:', errorReport);
     // In a real app, you might send this to analytics
   };
@@ -110,16 +111,22 @@ function App() {
                       </h2>
                       <EnhancedUserProfile
                         user={user}
-                        onUpdateUser={async (updates) => {
-                          setUser((prev) => ({ ...prev, ...updates }));
+                        onUpdateUser={async updates => {
+                          setUser(prev => ({ ...prev, ...updates }));
+                          // eslint-disable-next-line no-console
                           console.log('User updated:', updates);
                         }}
                         onUpdatePreferences={async (prefs: Partial<UserPreferences>) => {
-                          setUser((prev) => ({ ...prev, preferences: { ...prev.preferences, ...prefs } }));
+                          setUser(prev => ({
+                            ...prev,
+                            preferences: { ...prev.preferences, ...prefs },
+                          }));
+                          // eslint-disable-next-line no-console
                           console.log('Preferences updated:', prefs);
                         }}
                         onUpdateAvatar={async (avatarUrl: string) => {
-                          setUser((prev) => ({ ...prev, avatarUrl }));
+                          setUser(prev => ({ ...prev, avatarUrl }));
+                          // eslint-disable-next-line no-console
                           console.log('Avatar updated:', avatarUrl);
                         }}
                       />
@@ -141,8 +148,8 @@ function App() {
 
                     <NetworkErrorBoundary>
                       <DataErrorBoundary>
-                        <EnhancedTodoListSimple 
-                          initialTodos={todos} 
+                        <EnhancedTodoListSimple
+                          initialTodos={todos}
                           onTodoChange={setTodos}
                           showStats={true}
                         />
