@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useToggle } from '../../hooks';
-import { useCart } from '../../context';
+import { useCart, useAuth } from '../../context';
 
 const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { value: isMobileMenuOpen, toggle: toggleMobileMenu } = useToggle();
   const { getCartItemsCount } = useCart();
+  const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -114,28 +115,82 @@ const Header: React.FC = () => {
           {/* Right Icons */}
           <div className="flex items-center space-x-4">
             {/* User Account */}
-            <button
-              onClick={() => navigate('/auth')}
-              className={`p-2 transition-colors duration-200 ${
-                isIconActive('/auth')
-                  ? 'text-pink-500'
-                  : 'text-gray-600 hover:text-pink-500'
-              }`}
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-            </button>
+            {isAuthenticated ? (
+              <div className="relative group">
+                <button
+                  className="p-2 text-gray-600 hover:text-pink-500 transition-colors duration-200 hover:cursor-pointer"
+                >
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                    />
+                  </svg>
+                </button>
+                
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-1">
+                    <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                      Hello, {user?.firstName}!
+                    </div>
+                    <button
+                      onClick={() => navigate('/account')}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
+                    >
+                      My Account
+                    </button>
+                    <button
+                      onClick={() => navigate('/account/orders')}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
+                    >
+                      Order History
+                    </button>
+                    <button
+                      onClick={() => navigate('/account/favorites')}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:cursor-pointer"
+                    >
+                      Favorites
+                    </button>
+                    <hr className="my-1" />
+                    <button
+                      onClick={() => {
+                        logout();
+                        navigate('/');
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 hover:cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => navigate('/auth')}
+                className={`p-2 transition-colors duration-200 hover:cursor-pointer ${
+                  isIconActive('/auth')
+                    ? 'text-pink-500'
+                    : 'text-gray-600 hover:text-pink-500'
+                }`}
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+              </button>
+            )}
 
             {/* Shopping Cart */}
             <button
               onClick={() => navigate('/cart')}
-              className={`relative p-2 transition-colors duration-200 ${
+              className={`relative p-2 transition-colors duration-200 hover:cursor-pointer ${
                 isIconActive('/cart')
                   ? 'text-pink-500'
                   : 'text-gray-600 hover:text-pink-500'
@@ -160,7 +215,7 @@ const Header: React.FC = () => {
             {/* Wishlist/Favorites */}
             <button
               onClick={() => navigate('/account/favorites')}
-              className={`p-2 transition-colors duration-200 ${
+              className={`p-2 transition-colors duration-200 hover:cursor-pointer ${
                 isIconActive('/account/favorites')
                   ? 'text-pink-500'
                   : 'text-gray-600 hover:text-pink-500'
@@ -179,7 +234,7 @@ const Header: React.FC = () => {
             {/* Mobile menu button */}
             <button
               onClick={toggleMobileMenu}
-              className="md:hidden p-2 text-gray-600 hover:text-pink-500 transition-colors duration-200"
+              className="md:hidden p-2 text-gray-600 hover:text-pink-500 transition-colors duration-200 hover:cursor-pointer"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path

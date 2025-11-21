@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Button } from '../ui';
 
 const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -143,12 +144,13 @@ const Footer: React.FC = () => {
                 className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-pink-500 focus:border-pink-500"
                 required
               />
-              <button
+              <Button
                 type="submit"
-                className="px-4 py-2 bg-pink-500 text-white text-sm font-medium rounded-r-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-colors duration-200"
+                size="sm"
+                className="rounded-l-none border-l-0"
               >
                 Subscribe
-              </button>
+              </Button>
             </form>
           </div>
         </div>

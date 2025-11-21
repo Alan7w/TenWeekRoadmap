@@ -128,3 +128,6 @@ export const getImagePlaceholder = (category: string): string => {
   
   return placeholders[category as keyof typeof placeholders] || placeholders.accessories;
 };
+
+// Export validation utilities
+export * from './validation';
