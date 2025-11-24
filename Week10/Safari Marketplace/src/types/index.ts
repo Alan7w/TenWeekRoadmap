@@ -159,16 +159,9 @@ export interface FavoritesContextType {
   addToFavorites: (product: Product) => void;
   removeFromFavorites: (productId: string) => void;
   isFavorite: (productId: string) => boolean;
+  getFavoritesCount: () => number;
   clearFavorites: () => void;
 }
-
-// API response types (for future use)
-// export interface ApiResponse<T> {
-//   success: boolean;
-//   data: T;
-//   message?: string;
-//   error?: string;
-// }
 
 // Form validation types
 export interface FormErrors {

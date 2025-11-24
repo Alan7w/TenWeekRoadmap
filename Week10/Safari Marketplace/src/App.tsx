@@ -16,6 +16,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Auth from './pages/Auth';
 import Account from './pages/Account';
+import Favorites from './pages/Favorites';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
             <Route path="/shoes" element={<Shoes />} />
             <Route path="/accessories" element={<Accessories />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/favorites" element={<Favorites />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/account/*" element={<Account />} />

@@ -17,7 +17,7 @@ const Button: React.FC<ButtonProps> = ({
     primary: 'bg-pink-500 text-white hover:bg-pink-600 focus:ring-pink-500',
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500',
     outline: 'border border-pink-500 text-pink-500 hover:bg-pink-50 focus:ring-pink-500',
-    ghost: 'text-pink-500 hover:bg-pink-50 focus:ring-pink-500',
+    ghost: 'hover:bg-pink-50 focus:text-pink-500',
   };
   
   const sizes = {

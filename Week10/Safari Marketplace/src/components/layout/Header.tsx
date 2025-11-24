@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useToggle } from '../../hooks';
-import { useCart, useAuth } from '../../context';
+import { useCart, useFavorites, useAuth } from '../../context';
 
 const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { value: isMobileMenuOpen, toggle: toggleMobileMenu } = useToggle();
   const { getCartItemsCount } = useCart();
+  const { getFavoritesCount } = useFavorites();
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,12 +37,12 @@ const Header: React.FC = () => {
 
   // Helper function to check if an icon should be active
   const isIconActive = (path: string) => {
-    if (path === '/account/favorites' && location.pathname === '/account/favorites') {
+    if (path === '/favorites' && location.pathname === '/favorites') {
       return true;
     }
     if (path === '/auth' && (
       location.pathname === '/auth' || 
-      (location.pathname.startsWith('/account') && location.pathname !== '/account/favorites')
+      (location.pathname.startsWith('/account') && location.pathname !== '/favorites')
     )) {
       return true;
     }
@@ -214,9 +215,9 @@ const Header: React.FC = () => {
 
             {/* Wishlist/Favorites */}
             <button
-              onClick={() => navigate('/account/favorites')}
-              className={`p-2 transition-colors duration-200 hover:cursor-pointer ${
-                isIconActive('/account/favorites')
+              onClick={() => navigate('/favorites')}
+              className={`relative p-2 transition-colors duration-200 hover:cursor-pointer ${
+                isIconActive('/favorites')
                   ? 'text-pink-500'
                   : 'text-gray-600 hover:text-pink-500'
               }`}
@@ -229,6 +230,12 @@ const Header: React.FC = () => {
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 />
               </svg>
+              {/* Favourites Count Badge */}
+              {getFavoritesCount() > 0 && (
+                <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {getFavoritesCount()}
+                </span>
+              )}
             </button>
 
             {/* Mobile menu button */}

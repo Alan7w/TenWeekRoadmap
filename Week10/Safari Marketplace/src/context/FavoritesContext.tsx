@@ -48,6 +48,10 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
     return items.some(item => item.productId === productId);
   }, [items]);
 
+  const getFavoritesCount = useCallback(() => {
+    return items.length;
+  }, [items]);
+
   const clearFavorites = useCallback(() => {
     setItems([]);
   }, []);
@@ -57,6 +61,7 @@ export const FavoritesProvider: React.FC<FavoritesProviderProps> = ({ children }
     addToFavorites,
     removeFromFavorites,
     isFavorite,
+    getFavoritesCount,
     clearFavorites,
   };
 

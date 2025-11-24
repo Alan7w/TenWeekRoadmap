@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import type { Product } from '../../types';
-import { Button } from '../ui';
-import { useCart, useFavorites } from '../../context';
+import { Button, Confirmation } from '../ui';
+import { useCart, useFavorites, useAuth } from '../../context';
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
@@ -9,17 +11,41 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [confirmation, setConfirmation] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const isProductFavorited = isFavorite(product.id);
 
   const handleAddToCart = () => {
-    addItem(product, product.sizes[0], product.colors[0], 1);
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    
+    try {
+      addItem(product, product.sizes[0], product.colors[0], 1);
+      setConfirmation({ message: 'Added to cart!', type: 'success' });
+    } catch {
+      setConfirmation({ message: 'Failed to add to cart', type: 'error' });
+    }
   };
 
   const handleToggleFavorite = () => {
-    if (isProductFavorited) {
-      removeFromFavorites(product.id);
-    } else {
-      addToFavorites(product);
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    
+    try {
+      if (isProductFavorited) {
+        removeFromFavorites(product.id);
+        setConfirmation({ message: 'Removed from favorites', type: 'success' });
+      } else {
+        addToFavorites(product);
+        setConfirmation({ message: 'Added to favorites!', type: 'success' });
+      }
+    } catch {
+      setConfirmation({ message: 'Failed to update favorites', type: 'error' });
     }
   };
 
@@ -41,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           loading="lazy"
         />
         
-        {/* Add to Cart Overlay Button */}
+        {/* Add to Cart Button */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <Button
             onClick={handleAddToCart}
@@ -151,6 +177,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </div>
       </div>
+      
+      {/* Confirmation Notification */}
+      {confirmation && (
+        <Confirmation
+          message={confirmation.message}
+          type={confirmation.type}
+          onClose={() => setConfirmation(null)}
+        />
+      )}
     </div>
   );
 };
