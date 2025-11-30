@@ -3,3 +3,4 @@ export { default as Input } from './Input';
 export { default as Loading, LoadingSpinner } from './Loading';
 export { default as Checkbox } from './Checkbox';
 export { default as Confirmation } from './Confirmation';
+export { default as Search } from './Search';

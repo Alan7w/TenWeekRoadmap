@@ -1,24 +1,15 @@
-import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useToggle } from '../../hooks';
 import { useCart, useFavorites, useAuth } from '../../context';
+import { Search } from '../ui';
 
 const Header: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
   const { value: isMobileMenuOpen, toggle: toggleMobileMenu } = useToggle();
   const { getCartItemsCount } = useCart();
   const { getFavoritesCount } = useFavorites();
   const { isAuthenticated, user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      // TODO: Implement search functionality
-      console.log('Searching for:', searchQuery);
-    }
-  };
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -85,32 +76,7 @@ const Header: React.FC = () => {
 
           {/* Search Bar */}
           <div className="flex-1 max-w-lg mx-8 hidden md:block">
-            <form onSubmit={handleSearch} className="relative">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <svg
-                    className="h-5 w-5 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 text-sm"
-                  placeholder="Search..."
-                />
-              </div>
-            </form>
+            <Search />
           </div>
 
           {/* Right Icons */}
@@ -262,32 +228,7 @@ const Header: React.FC = () => {
           <div className="px-4 pt-2 pb-3 space-y-1">
             {/* Mobile Search */}
             <div className="mb-4">
-              <form onSubmit={handleSearch} className="relative">
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg
-                      className="h-5 w-5 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-pink-500 focus:border-pink-500 text-sm"
-                    placeholder="Search..."
-                  />
-                </div>
-              </form>
+              <Search />
             </div>
 
             {/* Mobile Navigation Links */}

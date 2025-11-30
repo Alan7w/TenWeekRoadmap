@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { Product } from '../../types';
 import { Button, Confirmation } from '../ui';
 import { useCart, useFavorites, useAuth } from '../../context';
@@ -6,15 +7,49 @@ import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: Product;
+  isHighlighted?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, isHighlighted = false }) => {
   const { addItem } = useCart();
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [confirmation, setConfirmation] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  
   const isProductFavorited = isFavorite(product.id);
+
+  // Check if this product should be highlighted from search
+  const urlParams = new URLSearchParams(location.search);
+  const highlightId = urlParams.get('highlight');
+  const storedHighlightId = localStorage.getItem('safari-search-highlight');
+  const shouldHighlight = (highlightId === product.id || storedHighlightId === product.id) || isHighlighted;
+  
+  const [showHighlight, setShowHighlight] = useState(shouldHighlight);
+
+  // Handle highlight animation and scrolling
+  useEffect(() => {
+    if (shouldHighlight && (highlightId === product.id || storedHighlightId === product.id)) {
+      // Remove highlight after animation
+      const timer = setTimeout(() => {
+        setShowHighlight(false);
+        if (storedHighlightId) {
+          localStorage.removeItem('safari-search-highlight');
+        }
+      }, 3000);
+      
+      // Scrolling
+      setTimeout(() => {
+        const element = document.getElementById(`product-${product.id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [shouldHighlight, highlightId, storedHighlightId, product.id]);
 
   const handleAddToCart = () => {
     if (!user) {
@@ -57,7 +92,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   };
 
   return (
-    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div 
+      id={`product-${product.id}`}
+      className={`group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 ${
+        showHighlight ? 'ring-4 ring-pink-500 ring-opacity-50 shadow-2xl transform scale-105' : ''
+      } ${
+        isHighlighted ? 'ring-2 ring-pink-400 ring-opacity-75' : ''
+      }`}
+    >
+      {showHighlight && (
+        <div className="absolute top-2 right-2 z-10 bg-pink-500 text-white text-xs px-2 py-1 rounded-full animate-bounce">
+          Found!
+        </div>
+      )}
       {/* Product Image */}
       <div className="aspect-square w-full overflow-hidden rounded-t-lg bg-gray-200">
         <img

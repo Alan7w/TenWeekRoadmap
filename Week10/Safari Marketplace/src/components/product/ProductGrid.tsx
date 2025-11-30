@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import type { Product } from '../../types';
 import ProductCard from './ProductCard';
 import { Loading, Button } from '../ui';
@@ -17,6 +18,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   productsPerPage = 9
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  
+  // Check for highlighted product from search
+  const highlightId = new URLSearchParams(location.search).get('highlight') || 
+    localStorage.getItem('safari-search-highlight');
   
   const totalPages = Math.ceil(products.length / productsPerPage);
   const effectiveCurrentPage = currentPage > totalPages && totalPages > 0 ? 1 : currentPage;
@@ -65,7 +71,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({
       {/* Product Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard 
+            key={product.id} 
+            product={product}
+            isHighlighted={product.id === highlightId}
+          />
         ))}
       </div>
       
