@@ -28,7 +28,7 @@ function WeatherApp() {
         setLoading(true)
         setError(null)
 
-        const key = import.meta.env.VITE_OPENWEATHER_API_KEY
+        const key = "fffd949bdccfa5e7ad9af7336478883f"
         const url = new URL(`https://api.openweathermap.org/data/2.5/weather`)
         url.searchParams.set("q", city)
         url.searchParams.set("appid", key)
